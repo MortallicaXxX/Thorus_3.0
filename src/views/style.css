@@ -1,0 +1,526 @@
+:root{
+
+  --app-background-color : #1E1F2F;
+
+  --bench-color:236,13%;
+  --bench-light:23%;
+
+  --bench-background-color:hsl(var(--bench-color),var(--bench-light));
+  --bench-background-color-lighter:hsl(var(--bench-color),calc(var(--bench-light) + 7%));
+  --bench-background-color-light:hsl(var(--bench-color),calc(var(--bench-light) + 2%));
+  --bench-background-color-dark:hsl(var(--bench-color),calc(var(--bench-light) - 2%));
+  --bench-background-color-darkest:hsl(var(--bench-color),calc(var(--bench-light) - 7%));
+
+  --bench-node-background-color:var(--bench-background-color-light);
+  --bench-node-box-shadow:2px 2px 2px var(--bench-background-color-darkest),
+    -2px -2px 2px var(--bench-background-color-lighter),
+    inset 2px 2px 2px var(--bench-background-color-darkest),
+    inset -2px -2px 2px var(--bench-background-color-lighter);
+  --bench-node-element-shadow:2px 2px 2px var(--bench-background-color-darkest),
+    -2px -2px 2px var(--bench-background-color-lighter);
+  --bench-node-element-shadow-invert:inset 2px 2px 2px var(--bench-background-color-darkest),
+    inset -2px -2px 2px var(--bench-background-color-lighter);
+
+  --node-general-color:;
+  --node-general-light:;
+  --bench-node-general-background-color : ;
+
+  --node-custom-color:0,53%;
+  --node-custom-light:58%;
+  --bench-node-custom-background-color : hsl(var(--node-custom-color),var(--node-custom-light));
+  --bench-node-custom-color-lighter:hsl(var(--node-custom-color),calc(var(--node-custom-light) + 7%));
+  --bench-node-custom-color-light:hsl(var(--node-custom-color),calc(var(--node-custom-light) + 2%));
+  --bench-node-custom-color-dark:hsl(var(--node-custom-color),calc(var(--node-custom-light) - 2%));
+  --bench-node-custom-color-darkest:hsl(var(--node-custom-color),calc(var(--node-custom-light) - 7%));
+  --bench-node-custom-box-shadow:2px 2px 2px var(--bench-node-custom-color-darkest),
+    -2px -2px 2px var(--bench-node-custom-color-lighter),
+    inset 2px 2px 2px var(--bench-node-custom-color-darkest),
+    inset -2px -2px 2px var(--bench-node-custom-color-lighter);
+
+  --font-size:12px;
+  --font-family: Menlo, Consolas, DejaVu Sans Mono, monospace;
+
+}
+
+app {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content min-content minmax(0,1fr);
+  grid-template-rows: minmax(0,1fr) min-content;
+  background-color: var(--app-background-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  user-select: none;
+}
+
+app > .slider.menu-slider {
+    height: 100%;
+    width: 5px;
+    box-shadow: inset -1px 1px 2px black;
+    cursor: col-resize;
+}
+
+container {
+  display: grid;
+  height: 100%;
+  width: 100%;
+}
+
+nav[name=menu]{
+  width : fit-content;
+  display: grid;
+  grid-auto-rows: min-content;
+  width: 100%;
+  min-width: 100px;
+}
+
+nav[name=menu] > .MenuSelector {
+    display: inline-flex;
+}
+
+nav[name=menu] > .MenuSelector > .ticket {
+
+}
+
+nav[name=menu] > .menuContent{
+  display: none;
+}
+
+nav[name=menu] > .menuContent.active{
+  display: grid;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > Button{
+  opacity: 0;
+  width: fit-content;
+  margin-left: auto;
+}
+
+nav[name=menu].active > .menuContent[name=ToolBox] > Button{
+  opacity: 1;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section {
+  display: grid;
+  padding: 5px;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button{
+  background-color: black;
+  height: 40px;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  border-radius: 0.5vw;
+  background-position: center;
+  margin : auto auto auto 0;
+  display:grid;
+  color : white;
+  font-weight:bold;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button::after{
+  width: max-content;
+  margin: auto auto auto 40px;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button#Nodes{
+  background-image: url(./img/Nodes.svg);
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button#Nodes::after{
+  content : "Nodes";
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button#Custom_Nodes::after{
+  content : "Custom nodes";
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > Button#Bench_Nodes::after{
+  content : "Bench nodes";
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > container{
+    display: none;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section.active > container{
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(10ch, 1fr) );
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid blue;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section > * {
+    grid-row: 1;
+}
+
+nav[name=menu] > .menuContent[name=ToolBox] > section.active > * {
+    grid-column: 1;
+    grid-row: auto;
+}
+
+container[name=WorkGroupView]{
+  display: grid;
+}
+
+container[name=WorkGroupView] > div[name=GroupView]{
+  display: grid;
+  grid-template-rows: min-content minmax(0,1fr);
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > * {
+  width : 100%;
+  height : 100%;
+  background-color: var(--bench-background-color);
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > nav[name=GroupMenu]{
+  background-color: var(--app-background-color);
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > nav[name=GroupMenu] > .SideMenu {
+    grid-row: 1;
+    display: inline-flex;
+}
+
+.ticket , .ticket.ghost{
+  background-color: var(--app-background-color);
+  color: white;
+  border:none;
+  padding : 5px 10px;
+  width: min-content;
+  min-width: 130px;
+  max-width: 300px;
+  box-shadow: inset 0px 1px 2px black;
+  font-size:10px;
+  display : grid;
+  user-select: none;
+}
+
+.ticket.unsave::after {
+    content: ' ';
+    grid-column: 1;
+    grid-row: 1;
+    height: 10px;
+    width: 10px;
+    background-color: cornflowerblue;
+    margin: auto auto auto 0;
+    border-radius: 100%;
+    filter: drop-shadow(0px 0px 6px cornflowerblue);
+    opacity: 0.8;
+    animation: ticket-unsave infinite 1s ease;
+}
+
+@keyframes ticket-unsave {
+  0% {
+  	opacity: 0.8;
+  }
+  50%{
+  	opacity: 0.4;
+  }
+  100% {
+  	opacity: 0.8;
+  }
+}
+
+
+.ticket > * , .ticket.ghost > *{
+  grid-column:1;
+  grid-row:1;
+  width: max-content;
+}
+
+.ticket > button , .ticket.ghost > button{
+  border:none;
+  color:white;
+  background: hsl(236deg 17% 11%);
+  height: 15px;
+  width: 20px;
+  font-size:8px;
+  font-weight: bold;
+  margin: auto 0 auto auto;
+  opacity:0;
+}
+
+.ticket.ghost{
+  pointer-events: none;
+}
+
+.ticket:hover > button , .ticket.ghost:hover > button{
+  opacity:1;
+}
+
+.ticket > button:hover , .ticket.ghost > button:hover{
+  color:white;
+  background-color:cornflowerblue;
+}
+
+.ticket.active{
+  background-color: var(--bench-background-color);
+  box-shadow: inset -1px 1px 2px black;
+  border-left: 5px solid cornflowerblue;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view {
+  background-image: linear-gradient(rgb(255 255 255 / 10%) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 10%) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  grid-row: 2;
+  grid-column:1;
+  z-index:1;
+  display: grid;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.ghost {
+  background:red;
+  opacity:0.2;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.left {
+  grid-column:1;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.right {
+  grid-column:2;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.active {
+  z-index:10;
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.code {
+
+}
+
+container[name=WorkGroupView] > div[name=GroupView] > div.view.code > .CodeMirror {
+  height : 100%;
+  font-family: Menlo, Consolas, DejaVu Sans Mono, monospace;
+  font-size: 10px;
+}
+
+.drawflow{
+  /* background-image: linear-gradient(black 1px, transparent 1px), linear-gradient(90deg, black 1px, transparent 1px);
+  background-size: 2rem 2rem; */
+  /* pointer-events: none; */
+}
+
+.drawflow .drawflow-node{
+  width: auto;
+  min-height: auto;
+  background-color: var(--bench-node-background-color);
+  border: none;
+  color: white;
+  box-shadow: var(--bench-node-box-shadow);
+  padding : 10px;
+  min-width: 300px;
+}
+
+.drawflow .drawflow-node[nodeType=general]{
+  width: auto;
+  min-height: auto;
+  background-color: var(--bench-node-custom-background-color);
+  border: none;
+  color: white;
+  box-shadow: var(--bench-node-box-shadow);
+  padding : 10px;
+}
+
+.drawflow .drawflow-node[nodeType=custom]{
+  width: auto;
+  min-height: auto;
+  background-color: var(--bench-node-custom-background-color);
+  border: none;
+  color: white;
+  box-shadow: var(--bench-node-custom-box-shadow);
+  padding : 10px;
+}
+
+.drawflow .drawflow-node[nodeType=custom] div[name=prop] , .drawflow .drawflow-node[nodeType=custom] div[name=childrens] , .drawflow .drawflow-node[nodeType=custom] div[name=proto] {
+  display : none;
+}
+
+.drawflow .drawflow-node.selected {
+  box-shadow: 0px 0px 10px blue;
+  background-color: #5c5c6a;
+}
+
+.drawflow-node .container{
+  row-gap: 10px;
+  display: grid;
+}
+
+.drawflow-node .container h1{
+  margin: 0;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.drawflow-node .container h1 , .drawflow-node .container [name=NodeOptions]{
+  grid-column: 1;
+  grid-row: 1;
+  width: fit-content;
+}
+
+.drawflow .drawflow-node .nodeoptions button{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.drawflow .drawflow-node.EntryPoint button.setEntry{
+  color : green;
+}
+
+.drawflow-node .container [name=NodeOptions]{
+  margin : auto 0 auto auto;
+  display : inline-flex;
+  column-gap: 5px;
+}
+
+.drawflow-node .container button{
+  border : none;
+  border-radius : 5px;
+  padding : 4px 10px;
+  font-size: 12px;
+  box-shadow: var(--bench-node-element-shadow);
+  background-color: #4d4d72;
+  color: #a2a2af;
+}
+
+.drawflow-node .container button:active{
+  box-shadow: var(--bench-node-element-shadow-invert);
+}
+
+.drawflow-node .container .fields{
+  width: min-content;
+  display: inline-flex;
+  column-gap : 15px;
+
+}
+
+.drawflow-node .container .fields > input{
+  grid-row: 1;
+  width: 18ch;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--bench-background-color);
+  box-shadow: var(--bench-node-element-shadow);
+  font-weight: bold;
+  outline: none;
+  height : 18px;
+}
+
+.drawflow-node .container .fields > input:focus{
+  box-shadow: var(--bench-node-element-shadow-invert);
+}
+
+.drawflow-node .container .fields > button{
+  padding : 4px 10px;
+  font-size: 12px;
+  box-shadow: var(--bench-node-element-shadow);
+}
+
+.drawflow-node .container .fields > button:active{
+  box-shadow: var(--bench-node-element-shadow-invert);
+}
+
+.drawflow-node .container div[name=prop] , .drawflow-node .container div[name=proto]{
+  display: grid;
+  row-gap : 10px;
+}
+
+/** */
+
+.drawflow-node .container div[name=prop] input[name=propName]{
+  color: lightcoral;
+}
+
+.drawflow-node .container div[name=prop] input[name=propValue]{
+  color: lightgreen;
+}
+
+.drawflow-node .container div[name=proto] input {
+  color : white;
+}
+
+.drawflow-node .container div[name=proto] input.variable.string {
+  color : green;
+}
+
+.drawflow-node .container div[name=proto] input.variable.number {
+  color : orange;
+}
+
+/** */
+
+.drawflow-node .container div[name=childrens]{
+  display: inline-flex;
+  column-gap: 10px;
+}
+
+.drawflow-node .container div[name=childrens] button.add{
+  background-color: lightgreen;
+}
+
+.drawflow-node .container div[name=childrens] button.minus{
+  background-color: lightcoral;
+}
+
+.drawflow-node .container > div[name=proto] > .fields.variable{
+
+}
+
+.drawflow-node .container > div[name=proto] > .fields.variable > input[name=protoName]{
+  color : indianred;
+}
+
+.drawflow-node .container > div[name=proto] > .fields.variable > button.function {
+  background-color: #4d4d72;
+  color: #a2a2af;
+}
+
+.drawflow-node .container > div[name=proto] > .fields.function{
+
+}
+
+.drawflow-node .container > div[name=proto] > .fields.function > input[name=protoName]{
+  color : royalblue;
+}
+
+.drawflow-node .container > div[name=proto] > .fields.function > input[name=protoValue]{
+  color : mediumpurple;
+  background-color: mediumpurple;
+}
+
+.drawflow-node .container > div[name=proto] > .fields.function > button.function{
+  background-color : mediumpurple;
+  color: #614797;
+}
+
+/* .drawflow-node .container .fields > input{
+  grid-row: 1;
+  max-width: 10ch;
+  margin: auto;
+  border-radius: 0.5vw;
+  border: none;
+  background-color: rgb(134 137 163);
+} */
+
+/* .drawflow-node .container > div[name=proto] > .fields > input.function{
+  background-color: mediumpurple;
+  color : mediumpurple;
+}
+
+.drawflow-node .container > div[name=proto] > .fields > button.function{
+  background: blue;
+}
+
+.drawflow-node .container > div[name=proto] > .fields > button.function.active{
+  background: mediumpurple;
+} */

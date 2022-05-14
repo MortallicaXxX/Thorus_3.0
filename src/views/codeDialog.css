@@ -1,0 +1,60 @@
+.codeDialog{
+  z-index: 10;
+  position: absolute;
+  height: 80%;
+  width: 50%;
+  top: 10%;
+  left: 45%;
+  display: grid;
+  grid-template-rows: min-content minmax(0,1fr);
+  background: whitesmoke;
+}
+
+.codeDialog > .codeMenu{
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+}
+
+.codeDialog > .codeMenu > .title {
+    grid-column: 2;
+    text-align: center;
+    width: 100%;
+}
+
+.codeDialog > .codeMenu > .ButtonContainer {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+    width: fit-content;
+    margin-left: auto;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+.codeDialog > .codeMenu > .ButtonContainer > button{
+    border-radius: 100%;
+    height: 15px;
+    width: 15px;
+    margin: auto;
+}
+
+.codeDialog > .codeMenu > .ButtonContainer > button[name=resize]{
+  background: orange;
+  border-color: orange;
+}
+
+.codeDialog > .codeMenu > .ButtonContainer > button[name=validate]{
+  background: green;
+  border-color: green;
+}
+
+.codeDialog > .codeMenu > .ButtonContainer > button[name=close]{
+  background: red;
+  border-color: red;
+}
+
+.codeDialog > .CodeMirror{
+  height : 100%;
+  width : 100%;
+  font-family: Menlo, Consolas, DejaVu Sans Mono, monospace;
+}

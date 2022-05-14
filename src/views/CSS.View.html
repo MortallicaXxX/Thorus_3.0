@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./js/codemirror.css">
+    <link rel="stylesheet" href="./styles/CSS.View.css">
+    <script src="./js/codemirror.js"></script>
+    <script src="./js/codemirror.modes/css/css.js"></script>
+    <title>CodeView</title>
+  </head>
+  <body>
+  </body>
+  <script src="./js/thorium-2.0.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    const { ipcRenderer } = require("electron");
+
+    class App extends thorium.Components.App{
+
+      static Menu = class extends thorium.Components.Nav{
+
+        static Header = class extends thorium.Components.Nav{
+          constructor(){
+            super({
+              prop : {
+                name : "Header"
+              },
+              childrens : [
+                new thorium.Components.Button({
+                  prop : {
+                    text : '+'
+                  },
+                  proto : {
+                    onMouseDown(){
+                      this.parent.parent.AddSheet();
+                    }
+                  }
+                })
+              ]
+            });
+          }
+        }
+
+        static Content = class extends thorium.Components.Div{
+
+          static SheetTicket = class extends thorium.Components.Button{
+            constructor(name,data){
+              super({
+                prop : {
+                  class : 'sheet-ticket'
+                },
+                childrens : [
+                  new thorium.Components.Input({
+                    prop : {name : "Name" , class : "sheet-ticket-name" , value : (name ? name : "")},
+                    proto : {
+                      name : null,
+                      onInitialise(){
+                        const _this = this;
+                        if(!this.element.value)setTimeout(function(){_this.element.select()},200);
+                      },
+                      onChange(){
+                        console.log("onChange");
+                        const name = this.element.value;
+                        console.log(name,this.app.isEditorExist(name))
+                        if(!this.app.isEditorExist(name) && !this.name){
+                          this.app.AddEditor(name);
+                          this.name = name;
+                        }
+                        else if(!this.app.isEditorExist(name) && this.name){
+                          this.app.ChangeEditorName(this.name,name);
+                          this.name = name;
+                        }
+                      },
+                      onFocus(){
+
+                      },
+                      onUnFocus(){
+                        if(this.element.value == "")this.element.select();
+                      },
+                      ChangeName(){
+
+                      },
+                    }
+                  }),
+                  new thorium.Components.Button({
+                    prop : {
+                      text : "&#8230;",
+                    },
+                    proto : {
+                      onMouseDown(){
+                        const _this = this;
+                        setTimeout(function(){_this.parent.children.Name.element.select()},200);
+                      },
+                      onMouseEnter(){
+                        this.parent.element.style["pointer-events"] = "none";
+                      },
+                      onMouseLeave(){
+                        this.parent.element.style["pointer-events"] = "all";
+                      }
+                    }
+                  }),
+                  new thorium.Components.Button({
+                    prop : {
+                      text : "&#x2573;",
+                    },
+                    proto : {
+                      onMouseEnter(){
+                        this.parent.element.style["pointer-events"] = "none";
+                      },
+                      onMouseLeave(){
+                        this.parent.element.style["pointer-events"] = "all";
+                      }
+                    }
+                  })
+                ],
+                proto : {
+                  getTicketValue(){
+                    return this.children.Name.element.value;
+                  },
+                  onMouseDown(){
+                    this.app.ShowEditor(this.getTicketValue());
+                  }
+                }
+              })
+            }
+          }
+
+          constructor(){
+            super({
+              prop : {
+                name : "Content"
+              },
+              proto : {
+                Clear(){
+                  this.innerHTML = "";
+                },
+                onReset(){
+                  this.Clear();
+                },
+                SetMenu(project){
+
+                  new thorium.UI.NodeUI(Array.from(Object.keys(project) , function(key,i){
+                    return new App.Menu.Content.SheetTicket(key,project[key])
+                  }))
+                  .BuildIn(this.element)
+                  .then(function(result){
+                    result.th.Initialise();
+                  })
+
+                },
+                AddSheet(){
+
+                  new thorium.UI.NodeUI([new App.Menu.Content.SheetTicket()])
+                  .BuildIn(this.element)
+                  .then(function(result){
+                    result.th.Initialise();
+                    result.children.Name.select();
+                  })
+
+                }
+              }
+            });
+          }
+        }
+
+        constructor(){
+          super({
+            prop : {
+              name : "Menu"
+            },
+            childrens : [
+              new App.Menu.Header(),
+              new App.Menu.Content(),
+            ],
+            proto : {
+              onInitialise(){
+
+                this.__defineGetter__('Header',function(){
+                  return this.element.children.Header.th;
+                })
+                this.__defineGetter__('Content',function(){
+                  return this.element.children.Content.th;
+                })
+
+              },
+              SetMenu(project){
+                this.element.children.Content.th.SetMenu(project);
+              },
+              AddSheet(){
+                this.Content.AddSheet();
+              }
+            }
+          })
+        }
+      }
+
+      static Content = class extends thorium.Components.Div{
+
+        static Editor = class extends thorium.Components.Textarea{
+          constructor(EditorName,data){
+            console.log(EditorName,data);
+            super({
+              prop : {
+                name : EditorName,
+              },
+              proto : {
+                editor : null,
+                row : (data ? data : null),
+                getArch : null,
+                onInitialise : function(){
+
+                  this.editor = CodeMirror.fromTextArea(this.element, {
+                    lineNumbers: true,
+                    mode:  "css"
+                  });
+
+                  this.editor.on('change',function(self,meta){
+                    // console.log(self.getValue());
+                  })
+
+                  this.editor.on('keypress',function(self,handler,x){
+                    if(thorium.Engine.Handlers.Keyboard.keys['S']
+                    && thorium.Engine.Handlers.Keyboard.keys['S'].isPressed
+                    && thorium.Engine.Handlers.Keyboard.keys['CONTROL']
+                    && thorium.Engine.Handlers.Keyboard.keys['CONTROL'].isPressed
+                  )thorium.app.th.Save();
+                  })
+
+                  if(this.row)this.editor.setValue(this.row);
+                  console.log(this,EditorName);
+
+                  this.getArch = ipcRenderer.on('get_arch',this.Export);
+
+                },
+                Export : function(event,message){
+                  const editor = thorium.app.th.children.Editor.editor;
+                  ipcRenderer.sendSync('thorium_arch_css_export', JSON.stringify({ filePath : message , template : editor.getValue()}));
+                },
+                ChangeName(name){
+                  this.element.name = name;
+                },
+                onActive(){
+                  this.editor.display.wrapper.style.display = 'block';
+                },
+                onUnActive(){
+                  this.editor.display.wrapper.style.display = 'none';
+                }
+              }
+            });
+          }
+        }
+
+        constructor(editorName){
+          super({
+            prop : {
+              name : "Content"
+            },
+            childrens : [
+              // new App.Content.Editor('null')
+            ],
+            proto : {
+              onReset(){
+                this.Clear();
+              },
+              Clear(){this.element.innerHTML = ""},
+              async Import(data){
+                for await(const key of Object.keys(data)){
+                  console.log('key',key)
+                  await this.AddEditor(key,data[key]);
+                }
+              },
+              AddEditor(editorName,data){
+                console.log("AddEditor",editorName)
+                new thorium.UI.NodeUI([
+                  new App.Content.Editor(editorName,data)
+                ])
+                .BuildIn(this.element)
+                .then(function(editor){
+                  console.log(editor)
+                  editor.th.Initialise();
+                })
+              },
+              getAllEditorsNames(){
+                return Array.from(this.element.querySelectorAll(`textarea`),function(textarea){
+                  return textarea.name;
+                }).filter((x,i)=>x);
+              },
+              getEditorByName(editorName){
+                const x = this.element.querySelectorAll(`textarea[name=${editorName}]`);
+                console.log(`textarea[name=${editorName}]`,x)
+                return ( x.length > 0 ? x[0].th : null);
+              },
+              getAllEditors(){
+                return Array.from(this.element.querySelectorAll(`textarea`),function(textarea){return textarea.th});
+              },
+              isEditorExist(editorName){
+                const editors = this.getAllEditorsNames();
+                return editors.includes(editorName);
+              },
+              RemoveEditor(editorName){
+                if(this.isEditorExist(editorName)){
+                  this.getEditorByName(editorName).editor.display.wrapper.remove();
+                  this.getEditorByName(editorName).element.remove();
+                }
+              },
+              RemoveUnamedEditor(editorName){
+                for(const textarea of this.element.querySelectorAll(`textarea`)){
+                  if(textarea.name == 'null')this.RemoveEditor(textarea.name);
+                }
+              },
+              Export(){
+                const x = {};
+                for(const name of this.getAllEditorsNames()){
+                  x[name] = this.getEditorByName(name).editor.getValue();
+                }
+                return x;
+              }
+            }
+          });
+        }
+
+      }
+
+      constructor(){
+        super({
+          prop : {
+            name : "App"
+          },
+          childrens : [
+            new App.Menu(),
+            new App.Content(),
+          ],
+          proto : {
+            onInitialise(){
+              const _this = this;
+
+              this.__defineGetter__('Menu',function(){
+                return this.element.children.Menu.th;
+              });
+              this.__defineGetter__('Content',function(){
+                return this.element.children.Content.th;
+              });
+
+              this.Import(ipcRenderer.sendSync('css-view-import' , ''));
+
+            },
+            Import(project){
+              this.Reset();
+              this.Menu.SetMenu(project);
+              this.Content.Import(project);
+            },
+            Export(){
+              return this.Content.Export();
+            },
+            Save(){
+              console.warn("SAVE");
+              const result = this.Export();
+              ipcRenderer.sendSync('css-view-update', result);
+            },
+            AddSheet(){
+
+            },
+            LoadSheet(){
+
+            },
+            AddEditor(editorName){
+              this.RemoveUnamedEditor();
+              this.children.Content.AddEditor(editorName);
+            },
+            isEditorExist(editorName){
+              return this.Content.isEditorExist(editorName);
+            },
+            ChangeEditorName(oldName,NewName){
+              const editor = this.getEditorByName(oldName);
+              editor.ChangeName(NewName);
+            },
+            RemoveEditor(editorName){
+              // if(this.isEditorExist(editorName))this.getEditorByName(editorName).element.remove();
+              this.Content.RemoveEditor(editorName);
+            },
+            getEditorByName(editorName){
+              return this.Content.getEditorByName(editorName);
+            },
+            GetAllEditors(){
+
+            },
+            getAllDatas(){
+
+            },
+            ShowEditor(editorName){
+              const editor = this.getEditorByName(editorName);
+              if(!editor.isActive)this.getEditorByName(editorName).radioLike();
+            },
+            RemoveUnamedEditor(){
+              this.Content.RemoveUnamedEditor();
+            }
+          }
+        });
+      }
+    }
+
+    class view extends View{
+
+      constructor(){
+        super(new App());
+      }
+
+    }
+
+    thorium.Vue(view).Show();
+
+  </script>
+</html>

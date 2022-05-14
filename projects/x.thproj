@@ -1,0 +1,710 @@
+{
+	"name": "x",
+	"path": "/home/morta/Documents/git/Thorus_3.0/projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "test"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "lol"
+							},
+							"proto": {}
+						}
+					],
+					"type": "nav",
+					"prop": {},
+					"proto": {}
+				},
+				{
+					"childrens": [
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "Article1"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "Article2"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {},
+							"proto": {}
+						}
+					],
+					"type": "section",
+					"prop": {
+						"name": "Content"
+					},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {},
+			"proto": {}
+		},
+		"css": {},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app-ee0e367bd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"6": {
+								"id": 6,
+								"name": "Menu",
+								"data": {
+									"tag": "Menu",
+									"prop": {},
+									"proto": {},
+									"nodeType": "custom",
+									"benchId": "ef5e7efe5",
+									"entryPoint": false
+								},
+								"class": "Menu",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "7",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 676.5714285714286,
+								"pos_y": 41
+							},
+							"7": {
+								"id": 7,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "6",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "8",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 219.57142857142858,
+								"pos_y": 80
+							},
+							"8": {
+								"id": 8,
+								"name": "Content",
+								"data": {
+									"tag": "Content",
+									"prop": {},
+									"proto": {},
+									"nodeType": "custom",
+									"benchId": "e95d3fbfe",
+									"entryPoint": false
+								},
+								"class": "Content",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "7",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 674.5714285714286,
+								"pos_y": 240
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "test"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "lol"
+									},
+									"proto": {}
+								}
+							],
+							"type": "nav",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [
+										{
+											"childrens": [],
+											"type": "h1",
+											"prop": {
+												"text": "Article1"
+											},
+											"proto": {}
+										},
+										{
+											"childrens": [],
+											"type": "text",
+											"prop": {
+												"text": "Article Text"
+											},
+											"proto": {}
+										}
+									],
+									"type": "article",
+									"prop": {},
+									"proto": {}
+								},
+								{
+									"childrens": [
+										{
+											"childrens": [],
+											"type": "h1",
+											"prop": {
+												"text": "Article2"
+											},
+											"proto": {}
+										},
+										{
+											"childrens": [],
+											"type": "text",
+											"prop": {
+												"text": "Article Text"
+											},
+											"proto": {}
+										}
+									],
+									"type": "article",
+									"prop": {},
+									"proto": {}
+								}
+							],
+							"type": "section",
+							"prop": {
+								"name": "Content"
+							},
+							"proto": {}
+						}
+					],
+					"type": "app",
+					"prop": {},
+					"proto": {}
+				}
+			},
+			"Menu-ef5e7efe5-ee0e367bd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"6": {
+								"id": 6,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "lol"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "8",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 744,
+								"pos_y": 317
+							},
+							"7": {
+								"id": 7,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "test"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "8",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 734.5,
+								"pos_y": 70.5
+							},
+							"8": {
+								"id": 8,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "7",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "6",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 270,
+								"pos_y": 204
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "test"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "lol"
+							},
+							"proto": {}
+						}
+					],
+					"type": "nav",
+					"prop": {},
+					"proto": {}
+				}
+			},
+			"Content-e95d3fbfe-ee0e367bd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {
+										"name": "Content"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 96,
+								"pos_y": 202
+							},
+							"2": {
+								"id": 2,
+								"name": "article",
+								"data": {
+									"tag": "article",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "article",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "6",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 551.4285714285714,
+								"pos_y": -19
+							},
+							"3": {
+								"id": 3,
+								"name": "article",
+								"data": {
+									"tag": "article",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "article",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "7",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "5",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 537.5714285714286,
+								"pos_y": 407.57142857142856
+							},
+							"4": {
+								"id": 4,
+								"name": "text",
+								"data": {
+									"tag": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "text",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 981,
+								"pos_y": 72.57142857142857
+							},
+							"5": {
+								"id": 5,
+								"name": "text",
+								"data": {
+									"tag": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "text",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "3",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 964,
+								"pos_y": 523
+							},
+							"6": {
+								"id": 6,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {
+										"text": "Article1"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 986.4285714285714,
+								"pos_y": -138
+							},
+							"7": {
+								"id": 7,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {
+										"text": "Article2"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "3",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 967.8571428571429,
+								"pos_y": 314.42857142857144
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "Article1"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "Article2"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "Article Text"
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {},
+							"proto": {}
+						}
+					],
+					"type": "section",
+					"prop": {
+						"name": "Content"
+					},
+					"proto": {}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,107 @@
+{
+	"name": "test",
+	"path": "C:\\Users\\Morta\\OneDrive\\Documents\\git\\Thorus_3.0\\projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [],
+					"type": "h1",
+					"prop": {},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {
+				"name": "App"
+			},
+			"proto": {}
+		},
+		"css": {},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app-ed668974f": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {
+										"name": "App"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 17,
+								"pos_y": 132
+							},
+							"2": {
+								"id": 2,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 448,
+								"pos_y": 86
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "h1",
+							"prop": {},
+							"proto": {}
+						}
+					],
+					"type": "app",
+					"prop": {
+						"name": "App"
+					},
+					"proto": {}
+				}
+			}
+		}
+	}
+}

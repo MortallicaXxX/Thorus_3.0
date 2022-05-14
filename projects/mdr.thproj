@@ -1,0 +1,178 @@
+{
+	"name": "mdr",
+	"path": "C:\\Users\\Morta\\OneDrive\\Documents\\git\\Thorus_3.0\\projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [],
+					"type": "main",
+					"prop": {},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {},
+			"proto": {}
+		},
+		"css": {},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 74,
+								"pos_y": 276
+							},
+							"2": {
+								"id": 2,
+								"name": "main",
+								"data": {
+									"tag": "main",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "main",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 591,
+								"pos_y": 267
+							},
+							"3": {
+								"id": 3,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 1105,
+								"pos_y": 192
+							}
+						}
+					}
+				}
+			},
+			"lol-ee12dff7e": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"2": {
+								"id": 2,
+								"name": "main",
+								"data": {
+									"tag": "main",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "main",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 166,
+								"pos_y": 222
+							},
+							"3": {
+								"id": 3,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 727,
+								"pos_y": 390
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,38 @@
+.dialog{
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  background: red;
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-auto-columns: 1fr;
+  padding : 0;
+}
+
+.dialog > nav {
+    display: inline-flex;
+    padding: 2px 5px;
+    background: whitesmoke;
+}
+
+.dialog > nav > button {
+    margin: auto 0 auto auto;
+    height: 15px;
+    width: 15px;
+    border-radius: 100%;
+}
+
+.dialog > nav > button.close {
+    background-color: red;
+}
+
+.dialog > .content {
+  display: grid;
+  grid-gap: 10px;
+  padding: 10px;
+  background-color: white;
+}
+
+.dialog.newProject{
+
+}

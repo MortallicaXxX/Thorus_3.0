@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <style media="screen">
+    app {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      display: grid;
+    }
+
+    app > form {
+      display: grid;
+      gap: 15px;
+      padding: 15px;
+      grid-template-rows: min-content minmax(0,1fr);
+    }
+
+    app > form > #button-zone > button{
+      font-size: 16px;
+    }
+
+    app > form#LIBRARY_ADD_CDN > #Content {
+      display: grid;
+      padding: 15px;
+      gap: 20px;
+    }
+
+    app > form#LIBRARY_ADD_CDN > #Content > input{
+      height: 20px;
+      font-size: 18px;
+    }
+
+    app > form#LIBRARY_ADD_CDN > #button-zone {
+      display: inline-flex;
+      margin: auto 0 0 auto;
+      gap: 15px;
+    }
+
+    /*  */
+
+    app > form#LIBRARY_MANAGER > #Content {
+      display: grid;
+      padding: 15px;
+      gap: 20px;
+    }
+
+    app > form#LIBRARY_MANAGER > #Content > .line {
+      display: grid;
+      grid-template-columns: min-content minmax(0,1fr) min-content min-content min-content;
+    }
+
+    app > form#LIBRARY_MANAGER > #button-zone {
+      display: inline-flex;
+      margin: auto 0 0 auto;
+      gap: 15px;
+    }
+
+
+  </style>
+  <body>
+
+  </body>
+  <script src="./js/thorium.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    const { ipcRenderer } = require("electron");
+
+    ipcRenderer.on('dialog-launcher',function(event,message){
+
+      class Dialog extends thorium.Components.App{
+
+        static Form = class extends thorium.Components.Form{
+
+          constructor(content,buttons){
+            super({
+              prop : {
+                id : message.name,
+                name : "Form"
+              },
+              childrens : [
+                new content(),
+                new buttons(),
+              ]
+            })
+          }
+
+        }
+
+        constructor(content,buttons){
+          super({
+            childrens : [
+              new Dialog.Form(content,buttons)
+            ]
+          });
+        }
+      }
+
+      const view = class extends View{
+
+        static Dialogs = class{
+
+          static LIBRARY_ADD_CDN = class extends Dialog{
+
+            static Content = class extends thorium.Components.Container{
+
+              static Name_Input = new thorium.Components.Input({
+                prop : {
+                  placeholder : "name",
+                  name : "name"
+                }
+              })
+
+              static Url_Input = new thorium.Components.Input({
+                prop : {
+                  placeholder : "url",
+                  name : "url"
+                }
+              })
+
+              constructor(){
+                super({
+                  prop : {
+                    id : "Content",
+                    name : "Content"
+                  },
+                  childrens : [
+                    view.Dialogs.LIBRARY_ADD_CDN.Content.Name_Input,
+                    view.Dialogs.LIBRARY_ADD_CDN.Content.Url_Input,
+                  ]
+                })
+              }
+            }
+
+            static Buttons = class extends thorium.Components.Container{
+
+              static CancelButton = new thorium.Components.Button({
+                prop : {
+                  text : "cancel",
+                  type : "button"
+                },
+                proto : {
+                  onMouseDown(){
+                    ipcRenderer.sendSync(`dialog-${message.name}-close`,'');
+                  }
+                }
+              })
+
+              static OkButton = new thorium.Components.Button({
+                prop : {
+                  text : "validate",
+                  type : "button"
+                },
+                proto : {
+                  onMouseDown(){
+                    console.log(this);
+                    const inputs = this.parentNode.parentNode.querySelectorAll('input');
+                    const validity = Array.from(inputs,function(input,x){
+
+                      function isValidHttpUrl(string) {
+                        let url;
+                        try {
+                          url = new URL(string);
+                        } catch (_) {
+                          return false;
+                        }
+                        return (url.protocol === "http:" || url.protocol === "https:") && (url.href == string || url.origin == string);
+                      }
+
+                      if(!input.value)return false;
+                      else if(input.name == 'url' && !isValidHttpUrl(input.value))return false;
+                      else return {name : input.name , value : input.value};
+                    });
+                    if(!validity.includes(false))ipcRenderer.sendSync(`dialog-${message.name}-validate`,{name : validity[0].value , url : validity[1].value});
+                    else {
+                      if(validity[0] == false)alert('wrong name');
+                      if(validity[1] == false)alert('wrong url');
+                    }
+                  }
+                }
+              })
+
+              constructor(){
+                super({
+                  prop : {
+                    id : "button-zone"
+                  },
+                  childrens : [
+                    view.Dialogs.LIBRARY_ADD_CDN.Buttons.CancelButton,
+                    view.Dialogs.LIBRARY_ADD_CDN.Buttons.OkButton,
+                  ]
+                });
+              }
+            }
+
+            constructor(){
+              super(
+                view.Dialogs.LIBRARY_ADD_CDN.Content ,
+                view.Dialogs.LIBRARY_ADD_CDN.Buttons
+              );
+            }
+          }
+
+          static LIBRARY_MANAGER = class extends Dialog{
+
+            static Content = class extends thorium.Components.Container{
+
+              static Line = class extends thorium.Components.Div{
+                constructor(data,index){
+                  super({
+                    prop : {
+                      id:`line-${data.index}`,
+                      class : 'line',
+                      index : data.index,
+                      style : Style.Css({
+                        "grid-row" : data.index
+                      })
+                    },
+                    childrens : [
+                      new thorium.Components.Text(data.name),
+                      new thorium.Components.Text(data.url),
+                      new thorium.Components.Button({
+                        prop : {
+                          type : 'button',
+                          name : "up",
+                          text : `&#x2191;`
+                        },
+                        proto : {
+                          onMouseDown(){this.parentNode.Up()}
+                        }
+                      }),
+                      new thorium.Components.Button({
+                        prop : {
+                          type : 'button',
+                          name : "down",
+                          text : `&#x2193;`
+                        },
+                        proto : {
+                          onMouseDown(){this.parentNode.Down()}
+                        }
+                      }),
+                      new thorium.Components.Button({
+                        prop : {
+                          type : 'button',
+                          text : `&#x2573;`
+                        },
+                        proto : {
+                          onMouseDown(){
+                            this.parentNode.remove();
+                          }
+                        }
+                      })
+                    ],
+                    proto : {
+                      Up(){
+                        const index = Number(this.getAttribute('index'));
+                        if(index > 1){
+                          this.parentNode.ChangeLinePosition(index,index - 1);
+                          console.log('Up');
+                        }
+                      },
+                      Down(){
+                        const index = Number(this.getAttribute('index'));
+                        if(index < this.parentNode.children.length){
+                          console.log('Down');
+                          this.parentNode.ChangeLinePosition(index,index + 1);
+                        }
+                      }
+                    }
+                  })
+                }
+              }
+
+              constructor(){
+                super({
+                  prop : {
+                    id : 'Content',
+                    name : 'Content'
+                  },
+                  proto : {
+                    option : message.option,
+                    async AfterInitialise(){
+                      const lib = this.option.data.lib;
+                      new thorium.UI.NodeUI(Array.from(Object.keys(lib),function(key,i){
+                        return new view.Dialogs.LIBRARY_MANAGER.Content.Line(lib[key],i);
+                      }))
+                      .BuildIn(this)
+                      .then(function(line){
+                        line.Initialise();
+                      })
+                    },
+                    ChangeLinePosition(idFrom,idTo){
+                      const from = document.getElementById(`line-${idFrom}`);
+                      const to = document.getElementById(`line-${idTo}`);
+                      from.id = `line-${idTo}`;
+                      from.style.gridRow = idTo;
+                      from.setAttribute('index',idTo);
+                      to.id = `line-${idFrom}`;
+                      to.style.gridRow = idFrom;
+                      to.setAttribute('index',idFrom);
+                    },
+                    getValues(){
+                      return Array.from(this.querySelectorAll('.line'),function(line,i){
+                        return {
+                          name : line.children[0].innerText,
+                          index : line.getAttribute('index'),
+                          url : line.children[1].innerText
+                        }
+                      })
+                    }
+                  }
+                })
+              }
+
+            }
+
+            static Buttons = class extends thorium.Components.Container{
+
+              static ValidateButton = new thorium.Components.Button({
+                prop : {
+                  text : "validate",
+                  type : "button"
+                },
+                proto : {
+                  onMouseDown(){
+
+                    const values = this.app.Form.Content.getValues();
+                    const toReturn = {};
+                    Array.from(values,function(data,i){
+                      toReturn[data.name] = data;
+                    })
+
+                    ipcRenderer.sendSync(`dialog-${message.name}-validate`,toReturn);
+                  }
+                }
+              })
+
+              constructor(){
+                super({
+                  prop : {
+                    id : "button-zone"
+                  },
+                  childrens : [
+                    view.Dialogs.LIBRARY_MANAGER.Buttons.ValidateButton,
+                  ]
+                });
+              }
+            }
+
+            constructor(){
+              super(
+                view.Dialogs.LIBRARY_MANAGER.Content,
+                view.Dialogs.LIBRARY_MANAGER.Buttons
+              )
+            }
+
+          }
+
+          static ADD_NODE_BENCH = class extends Dialog{
+
+            static Content = class extends thorium.Components.Container{
+
+              constructor(){
+                super({
+                  prop : {
+                    id : 'Content',
+                    name : 'Content'
+                  },
+                  childrens : [
+                    new thorium.Components.Input({
+                      prop : {
+                        name : "ComponentName",
+                        placeholder : "Component Name",
+                      }
+                    })
+                  ],
+                  proto : {
+
+                  }
+                })
+              }
+
+            }
+
+            static Buttons = class extends thorium.Components.Container{
+
+              static ValidateButton = new thorium.Components.Button({
+                prop : {
+                  text : "validate",
+                  type : "button"
+                },
+                proto : {
+                  onMouseDown(){
+
+                    const componentName = this.parentNode.parentNode.Content.ComponentName.value;
+
+                    (!componentName ? alert('null') : ipcRenderer.sendSync(`dialog-${message.name}-validate`,componentName));
+
+                  }
+                }
+              })
+
+              constructor(){
+                super({
+                  prop : {
+                    id : "button-zone"
+                  },
+                  childrens : [
+                    view.Dialogs.ADD_NODE_BENCH.Buttons.ValidateButton,
+                  ]
+                });
+              }
+            }
+
+            constructor(){
+              super(
+                view.Dialogs.ADD_NODE_BENCH.Content,
+                view.Dialogs.ADD_NODE_BENCH.Buttons
+              )
+            }
+
+          }
+
+        }
+
+        constructor(){
+          super(new view.Dialogs[message.name]());
+        }
+
+      }
+
+      thorium.Vue(view).Show();
+
+    })
+
+  </script>
+</html>

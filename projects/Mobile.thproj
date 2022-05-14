@@ -1,0 +1,1018 @@
+{
+	"isSaved": false,
+	"name": "Mobile",
+	"path": "/home/morta/Documents/git/Thorus_3.0/projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "⚙️",
+								"class": "button menu"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "🏠",
+								"class": "button menu active"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "👤",
+								"class": "button menu"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						}
+					],
+					"type": "nav",
+					"prop": {
+						"name": "Menu"
+					},
+					"proto": {}
+				},
+				{
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "h1",
+							"prop": {
+								"text": "New York"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#9733;",
+										"class": "button star"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#10003;",
+										"class": "button validate"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#10005;",
+										"class": "button dissmis"
+									},
+									"proto": {}
+								}
+							],
+							"type": "aside",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "New York City"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "L'État de New York (en anglais : State of New York) est un État des États-Unis, quatrième plus peuplé du pays avec 19,5 millions d'habitants en 2019. Il se trouve dans le nord-est du pays et a pour capitale la ville d'Albany, située dans le nord-est de l'État. Vers le nord et l'ouest, son territoire s'élargit et partage une longue frontière avec le Canada (provinces de l'Ontario et du Québec), dont une grande partie est constituée par les lacs Érié et Ontario. À l'est, il est bordé par le Vermont, le Massachusetts, le Connecticut, tandis qu'au sud, il partage une frontière avec le New Jersey et la Pennsylvanie."
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {
+								"name": "ticket",
+								"class": "article ticket"
+							},
+							"proto": {}
+						}
+					],
+					"type": "main",
+					"prop": {},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {
+				"name": "MobileApp"
+			},
+			"proto": {
+				"AfterInitialise": "function() {  console.warn('welcome to thorium mobile project');}"
+			}
+		},
+		"css": {
+			"style": ":root{\n  --font-size:12px;\n  --default-color:#0d0d28;\n}\n\napp{\n  position:absolute;\n  left:0;\n  top:0;\n  user-select:none;\n  display:grid;\n  grid-template-rows:minmax(0,1fr);\n  height:100%;\n  width:100%;\n  font-size:var(--font-size);\n  background-image:url('../../background.jpg');\n  background-position:center;\n  font-family:Menlo, Consolas, DejaVu Sans Mono, monospace;\n}\n\napp > *{\n  grid-column:1;\n  grid-row:1;\n}\n\napp > nav{\n  margin:auto auto 5px auto;\n  width:98%;\n  background:var(--default-color);\n  height : calc(var(--font-size) * 4);\n  display:inline-flex;\n  border-radius:15px;\n  z-index:10;\n  box-shadow: -2px -2px 2px #19193e, 2px 2px 2px #03030a;\n}\n\napp > nav > button{\n  border-radius:100%;\n  width : fit-content;\n  height : fit-content;\n  padding : 5px;\n  margin : auto;\n  border : none;\n  transition:0.4s;\n  background:var(--default-color);\n  font-size:25px;\n  box-shadow: inset -2px -2px 2px #19193e, inset 2px 2px 2px #03030a;\n}\n\napp > nav > button.active{\n  transform : translateY(-50%);\n  box-shadow: 0px -2px 2px #19193e , 0px 2px 2px #03030a;\n}\n\napp > main{\n  background: linear-gradient(180deg, rgba(255,154,0,0.4) 0%, rgba(252,198,0,0.2) 50%, rgba(82,82,82,0.5) 100%);\n  display : grid;\n  grid-template-rows : min-content minmax(0,1fr) minmax(0,1fr);\n  padding:5px;\n  color : white;\n}\n\napp > main > h1{\n  font-size : 40px;\n  margin : auto;\n}\n\napp > main > aside{\n  display:grid;\n  grid-template-columns:50px;\n  grid-auto-rows:min-content;\n  margin: auto auto auto 0;\n  row-gap:5px;\n  background: linear-gradient(83deg, rgba(130,130,130,0.75) 0%, rgba(0,0,0,0.75) 100%);\n  border-radius:15px;\n  padding : 5px;\n}\n\napp > main > aside > button{\n  background-color : transparent;\n  color : white;\n  border:none;\n  font-size : 30px;\n  font-weight : bold;\n  display:grid;\n  grid-template-columns:30px;\n  margin:0 auto;\n}\n\napp > main > aside > button.star:hover{\n  color : yellow;\n}\n\napp > main > aside > button.validate:hover{\n  color : green;\n}\n\napp > main > aside > button.dissmis:hover{\n  color : red;\n}\n\napp > main > aside > button.star:active::after{\n  content : 'Star';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > aside > button.star::after{\n  content : '180';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > aside > button.validate::after{\n  content : '360';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > aside > button.dissmis::after{\n  content : '15';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > aside > button.validate:active::after{\n  content : 'Validate';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > aside > button.dissmis:active::after{\n  content : 'Dissmis';\n  font-size:10px;\n  margin : auto;\n  color : white;\n}\n\napp > main > article{\n  display:grid;\n  grid-auto-rows : min-content;\n  background-color : rgba(0,0,0,0.75);\n  color : white;\n  padding : 10px;\n  height:fit-content;\n  border-radius:15px;\n  background: linear-gradient(83deg, rgba(130,130,130,0.75) 0%, rgba(0,0,0,0.75) 100%);\n}"
+		},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app-e55219dd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {
+										"name": "MobileApp"
+									},
+									"proto": {
+										"AfterInitialise": "function() {  console.warn('welcome to thorium mobile project');}"
+									},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "7",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 102,
+								"pos_y": 190
+							},
+							"4": {
+								"id": 4,
+								"name": "Menu",
+								"data": {
+									"tag": "Menu",
+									"prop": {},
+									"proto": {},
+									"nodeType": "custom",
+									"benchId": "e5a0f0f2d",
+									"entryPoint": false
+								},
+								"class": "Menu",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 642,
+								"pos_y": 195
+							},
+							"7": {
+								"id": 7,
+								"name": "View",
+								"data": {
+									"tag": "View",
+									"prop": {},
+									"proto": {},
+									"nodeType": "custom",
+									"benchId": "e1e6b97bb",
+									"entryPoint": false
+								},
+								"class": "View",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 644,
+								"pos_y": 330
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						"e5a0f0f2d",
+						"e1e6b97bb"
+					],
+					"type": "app",
+					"prop": {
+						"name": "MobileApp"
+					},
+					"proto": {
+						"AfterInitialise": "function() {  console.warn('welcome to thorium mobile project');}"
+					}
+				}
+			},
+			"Menu-e5a0f0f2d-e55219dd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {
+										"name": "Menu"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											},
+											{
+												"node": "4",
+												"output": "input_1"
+											},
+											{
+												"node": "4",
+												"output": "input_1"
+											},
+											{
+												"node": "4",
+												"output": "input_1"
+											},
+											{
+												"node": "4",
+												"output": "input_1"
+											},
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_3": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 86,
+								"pos_y": 289
+							},
+							"2": {
+								"id": 2,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "👤",
+										"class": "button menu"
+									},
+									"proto": {
+										"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+									},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_3"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 615,
+								"pos_y": 522
+							},
+							"3": {
+								"id": 3,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "🏠",
+										"class": "button menu active"
+									},
+									"proto": {
+										"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+									},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 607,
+								"pos_y": 284
+							},
+							"4": {
+								"id": 4,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "⚙️",
+										"class": "button menu"
+									},
+									"proto": {
+										"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+									},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											},
+											{
+												"node": "1",
+												"input": "output_1"
+											},
+											{
+												"node": "1",
+												"input": "output_1"
+											},
+											{
+												"node": "1",
+												"input": "output_1"
+											},
+											{
+												"node": "1",
+												"input": "output_1"
+											},
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 578,
+								"pos_y": 29
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "⚙️",
+								"class": "button menu"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "🏠",
+								"class": "button menu active"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						},
+						{
+							"childrens": [],
+							"type": "button",
+							"prop": {
+								"text": "👤",
+								"class": "button menu"
+							},
+							"proto": {
+								"onMouseDown": "function() {  if(!this.isActive)this.radioLike();}"
+							}
+						}
+					],
+					"type": "nav",
+					"prop": {
+						"name": "Menu"
+					},
+					"proto": {}
+				}
+			},
+			"Widgets-e880e3b8b-e55219dd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "div",
+								"data": {
+									"tag": "div",
+									"prop": {
+										"name": "View"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "div",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 92,
+								"pos_y": 270
+							},
+							"4": {
+								"id": 4,
+								"name": "LeftWidgets",
+								"data": {
+									"tag": "LeftWidgets",
+									"prop": {},
+									"proto": {},
+									"nodeType": "custom",
+									"benchId": "e2c3ee6b7",
+									"entryPoint": false
+								},
+								"class": "LeftWidgets",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 583,
+								"pos_y": 328
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "LeftWidgets"
+									},
+									"proto": {}
+								}
+							],
+							"type": "section",
+							"prop": {},
+							"proto": {}
+						}
+					],
+					"type": "div",
+					"prop": {
+						"name": "View"
+					},
+					"proto": {}
+				}
+			},
+			"LeftWidgets-e2c3ee6b7-e880e3b8b": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 87,
+								"pos_y": 274
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [],
+					"type": "section",
+					"prop": {},
+					"proto": {}
+				}
+			},
+			"View-e1e6b97bb-e55219dd": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "main",
+								"data": {
+									"tag": "main",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": true
+								},
+								"class": "main",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "6",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_3": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 94,
+								"pos_y": 249.14285714285714
+							},
+							"2": {
+								"id": 2,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {
+										"text": "New York"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 534.8571428571429,
+								"pos_y": 123
+							},
+							"3": {
+								"id": 3,
+								"name": "article",
+								"data": {
+									"tag": "article",
+									"prop": {
+										"name": "ticket",
+										"class": "article ticket"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "article",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_3"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "5",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 529,
+								"pos_y": 641.4285714285714
+							},
+							"4": {
+								"id": 4,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {
+										"text": "New York City"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "3",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 986,
+								"pos_y": 583.1428571428571
+							},
+							"5": {
+								"id": 5,
+								"name": "text",
+								"data": {
+									"tag": "text",
+									"prop": {
+										"text": "L'État de New York (en anglais : State of New York) est un État des États-Unis, quatrième plus peuplé du pays avec 19,5 millions d'habitants en 2019. Il se trouve dans le nord-est du pays et a pour capitale la ville d'Albany, située dans le nord-est de l'État. Vers le nord et l'ouest, son territoire s'élargit et partage une longue frontière avec le Canada (provinces de l'Ontario et du Québec), dont une grande partie est constituée par les lacs Érié et Ontario. À l'est, il est bordé par le Vermont, le Massachusetts, le Connecticut, tandis qu'au sud, il partage une frontière avec le New Jersey et la Pennsylvanie."
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "text",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "3",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 990.4285714285714,
+								"pos_y": 812.1428571428571
+							},
+							"6": {
+								"id": 6,
+								"name": "aside",
+								"data": {
+									"tag": "aside",
+									"prop": {},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "aside",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "9",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "8",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_3": {
+										"connections": [
+											{
+												"node": "7",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 542.1428571428571,
+								"pos_y": 366.42857142857144
+							},
+							"7": {
+								"id": 7,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "&#10005;",
+										"class": "button dissmis"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "6",
+												"input": "output_3"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 1004,
+								"pos_y": 366.42857142857144
+							},
+							"8": {
+								"id": 8,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "&#10003;",
+										"class": "button validate"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "6",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 1006,
+								"pos_y": 167.42857142857142
+							},
+							"9": {
+								"id": 9,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "&#9733;",
+										"class": "button star"
+									},
+									"proto": {},
+									"nodeType": "default",
+									"entryPoint": false
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "6",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 997.4285714285714,
+								"pos_y": -41.42857142857143
+							}
+						}
+					}
+				},
+				"template": {
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "h1",
+							"prop": {
+								"text": "New York"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#9733;",
+										"class": "button star"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#10003;",
+										"class": "button validate"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "&#10005;",
+										"class": "button dissmis"
+									},
+									"proto": {}
+								}
+							],
+							"type": "aside",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "h1",
+									"prop": {
+										"text": "New York City"
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "text",
+									"prop": {
+										"text": "L'État de New York (en anglais : State of New York) est un État des États-Unis, quatrième plus peuplé du pays avec 19,5 millions d'habitants en 2019. Il se trouve dans le nord-est du pays et a pour capitale la ville d'Albany, située dans le nord-est de l'État. Vers le nord et l'ouest, son territoire s'élargit et partage une longue frontière avec le Canada (provinces de l'Ontario et du Québec), dont une grande partie est constituée par les lacs Érié et Ontario. À l'est, il est bordé par le Vermont, le Massachusetts, le Connecticut, tandis qu'au sud, il partage une frontière avec le New Jersey et la Pennsylvanie."
+									},
+									"proto": {}
+								}
+							],
+							"type": "article",
+							"prop": {
+								"name": "ticket",
+								"class": "article ticket"
+							},
+							"proto": {}
+						}
+					],
+					"type": "main",
+					"prop": {},
+					"proto": {}
+				}
+			}
+		}
+	}
+}

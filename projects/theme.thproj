@@ -1,0 +1,398 @@
+{
+	"name": "theme",
+	"path": "C:\\Users\\Morta\\OneDrive\\Documents\\git\\Thorus_1.0\\projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [
+						{
+							"childrens": [
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "Button",
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "button",
+									"prop": {
+										"text": "lol",
+										"class": "neumorphisme"
+									},
+									"proto": {}
+								}
+							],
+							"type": "section",
+							"prop": {},
+							"proto": {}
+						},
+						{
+							"childrens": [
+								{
+									"childrens": [
+										{
+											"childrens": [],
+											"type": "button",
+											"prop": {},
+											"proto": {}
+										}
+									],
+									"type": "container",
+									"prop": {
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								},
+								{
+									"childrens": [],
+									"type": "container",
+									"prop": {
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								}
+							],
+							"type": "section",
+							"prop": {},
+							"proto": {}
+						}
+					],
+					"type": "section",
+					"prop": {
+						"class": "demo"
+					},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {},
+			"proto": {}
+		},
+		"css": {
+			"style": ":root {\n  --color:217,11%;\n  --light:10%;\n  --background-color:hsl(var(--color),var(--light));\n}\n\napp{\n  background:whitesmoke;\n  height:100%;\n  width:100%;\n  position:absolute;\n  top:0;\n  left:0;\n  display:grid;\n}\n\napp > .demo{\n  background:var(--background-color);\n  height:80%;\n  width:80%;\n  margin:auto;\n  max-height:1200px;\n  max-width:800px;\n  display:grid;\n  padding:20px;\n  gap:50px;\n}\n\napp > .demo > section{\n  display:inline-flex;\n  gap:15px;\n}\n\n.neumorphisme{\n  --background-color-light:hsl(var(--color),calc(var(--light) + 5%));\n  --background-color-dark:hsl(var(--color),calc(var(--light) - 5%));\n  background: var(--background-color);\n  box-shadow:  5px 5px 10px var(--background-color-dark), \n    -5px -5px 10px var(--background-color-light);\n}\n\nbutton.neumorphisme{\n  height:max-content;\n  width:fit-content;\n  border:none;\n  border-radius: 10px;  \n  color:white;\n  font-weight:bold;\n  padding:15px 25px;\n}\n\nbutton.neumorphisme:active{\n  box-shadow: inset 5px 5px 10px var(--background-color-dark),\n            inset -5px -5px 10px var(--background-color-light);\n}\n\ncontainer.neumorphisme{\n  min-height:150px;\n  min-width:150px;\n}\n"
+		},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": []
+									}
+								},
+								"pos_x": 141,
+								"pos_y": -202.5
+							},
+							"2": {
+								"id": 2,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {
+										"class": "demo"
+									},
+									"proto": {}
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "9",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "6",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 523.5,
+								"pos_y": -77.5
+							},
+							"3": {
+								"id": 3,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "Button",
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "9",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 1485,
+								"pos_y": -709.5
+							},
+							"4": {
+								"id": 4,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {
+										"text": "lol",
+										"class": "neumorphisme"
+									},
+									"proto": {}
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "9",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 1420.5,
+								"pos_y": -310
+							},
+							"5": {
+								"id": 5,
+								"name": "container",
+								"data": {
+									"tag": "container",
+									"prop": {
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								},
+								"class": "container",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "6",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "8",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 1368.5,
+								"pos_y": 146.5
+							},
+							"6": {
+								"id": 6,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "5",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "7",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 1005.5,
+								"pos_y": 294
+							},
+							"7": {
+								"id": 7,
+								"name": "container",
+								"data": {
+									"tag": "container",
+									"prop": {
+										"class": "neumorphisme "
+									},
+									"proto": {}
+								},
+								"class": "container",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "6",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 1380.5,
+								"pos_y": 524
+							},
+							"8": {
+								"id": 8,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "5",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 1745,
+								"pos_y": 162.5
+							},
+							"9": {
+								"id": 9,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 911,
+								"pos_y": -237.5
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

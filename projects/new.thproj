@@ -1,0 +1,330 @@
+{
+	"name": "new",
+	"path": "C:\\Users\\Morta\\OneDrive\\Documents\\git\\Thorus_3.0\\projects",
+	"data": {
+		"app": {},
+		"css": {},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app-e732665bf": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 158,
+								"pos_y": 341
+							},
+							"2": {
+								"id": 2,
+								"name": "Menu",
+								"data": {
+									"tag": "Menu",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "Menu",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 788,
+								"pos_y": 122
+							},
+							"3": {
+								"id": 3,
+								"name": "Contenu",
+								"data": {
+									"tag": "Contenu",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "Contenu",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 824,
+								"pos_y": 493
+							}
+						}
+					}
+				}
+			},
+			"Menu-eb70d9af5-e732665bf": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 150,
+								"pos_y": 300
+							},
+							"2": {
+								"id": 2,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 854,
+								"pos_y": 454
+							},
+							"3": {
+								"id": 3,
+								"name": "button",
+								"data": {
+									"tag": "button",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "button",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 876,
+								"pos_y": 144
+							}
+						}
+					}
+				}
+			},
+			"Contenu-edef78309-e732665bf": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "div",
+								"data": {
+									"tag": "div",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "div",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 150,
+								"pos_y": 300
+							},
+							"2": {
+								"id": 2,
+								"name": "article",
+								"data": {
+									"tag": "article",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "article",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 643,
+								"pos_y": 261
+							}
+						}
+					}
+				}
+			},
+			"Menu-eb70d9af5": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "nav",
+								"data": {
+									"tag": "nav",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "nav",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 150,
+								"pos_y": 300
+							},
+							"2": {
+								"id": 2,
+								"name": "article",
+								"data": {
+									"tag": "article",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "article",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": []
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 150,
+								"pos_y": 300
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

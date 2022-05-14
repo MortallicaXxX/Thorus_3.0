@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Thorus</title>
+    <link rel="stylesheet" href="./js/codemirror.css">
+    <script src="./js/codemirror.js"></script>
+    <script src="./js/codemirror.modes/css/css.js"></script>
+    <script src="./js/codemirror.modes/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css">
+    <link rel="stylesheet" href="./js/thorium.theme.default.css"></link>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/dialogs.css">
+    <link rel="stylesheet" href="./codeDialog.css">
+  </head>
+  <body>
+
+  </body>
+  <script src="./js/thorium-3.0.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    const { ipcRenderer } = require("electron");
+
+    // const x = ipcRenderer.sendSync('get-components-models','');
+    // console.
+
+    const nodeTemplate = {
+      "app" : {input : 0 , output : 1},
+      "main" : {input : 1 , output : 1},
+      "nav" : {input : 1 , output : 1},
+      "article" : {input : 1 , output : 1},
+      "section" : {input : 1 , output : 1},
+      "aside" : {input : 1 , output : 1},
+      "text" : {input : 1 , output : 0},
+      "h1" : {input : 1 , output : 0},
+      "dialog" : {input : 1 , output : 1},
+      "div" : {input : 1 , output : 1},
+      "container" : {input : 1 , output : 1},
+      "form" : {input : 1 , output : 1},
+      "button" : {input : 1 , output : 0},
+      "input" : {input : 1 , output : 0},
+      "textarea" : {input : 1 , output : 0},
+      "select" : {input : 1 , output : 1},
+      "option" : {input : 1 , output : 1},
+      "optgroupe" : {input : 1 , output : 1},
+    }
+
+    class NodeUI{
+
+      /** Sur base de la class da la connection , retourne l'id du node recevant la connection */
+      static getNodeInID(connection){
+        const x = connection.classList;
+        const z = x[1];
+        const y = z.split('_')[z.split('_').length - 1];
+        return y.split('-')[y.split('-').length - 1];
+      }
+
+      /** Sur base de la class da la connection , retourne l'id du node fesant sortir la connection */
+      static getNodeOutID(connection){
+        const x = connection.classList;
+        const z = x[2];
+        const y = z.split('_')[z.split('_').length - 1];
+        return y.split('-')[y.split('-').length - 1];
+      }
+
+      static getOutputId(connection){
+        const x = connection.classList;
+        const z = x[3];
+        return z.split('_')[z.split('_').length - 1];
+      }
+
+      static getNode(id){
+        const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+        return view.GetNode(id).parentNode;
+      }
+
+      static getNodeId(src){
+        return src.children[0].id;
+      }
+
+      static toObject(view,src){
+        return new Promise(async function(resolve,reject){
+          const object = { childrens : [] };
+          const nodeID = NodeUI.getNodeId(src);
+          object.type = src.children[0].classList[1];
+          object.prop = (function(src){
+            const props = {};
+            const x = src.querySelectorAll('div[name=prop]')[0];
+            if(x) for(const e of x.children){
+              const fields = e.th;
+              const values = fields.GetValues();
+              if(values){
+                props[values[0]] = values[1];
+              }
+            }
+            return props;
+          })(src);
+          object.proto = (function(src){
+            const protos = {};
+            const x = src.querySelectorAll('div[name=proto]')[0];
+            if(x) for(const e of x.children){
+              const fields = e.th;
+              const values = fields.GetValues();
+              if(values){
+                // if(values[1].includes('function'))protos[values[0]] = eval(`(${values[1]})`);
+                // else protos[values[0]] = values[1];
+                protos[values[0]] = values[1];
+              }
+            }
+            return protos;
+          })(src);
+
+          const nodeOutputs = view.querySelectorAll(`svg.connection.node_out_${nodeID}`);
+          for await(const e of nodeOutputs){
+            const nodeIn = NodeUI.getNodeInID(e);
+            const nodeOut = NodeUI.getNodeOutID(e);
+            const childrenID = NodeUI.getOutputId(e) - 1;
+            object.childrens[childrenID] = await NodeUI.toObject(view,NodeUI.getNode(nodeIn));
+          }
+
+          resolve(object);
+        })
+      }
+    }
+
+    class NodeValidity{
+      static isAppPresent(componentsList){
+        return componentsList.includes("app");
+      }
+      static isUniqueApp(componentsList){
+        return (Array.from(componentsList,function(x,i){
+          if(x == "app")return true;
+          else return null;
+        }).filter((x,i)=>x).length > 1 ? false : true)
+      }
+      static isAppPresentAndUnique(componentsList){
+        return (NodeValidity.isAppPresent(componentsList) && NodeValidity.isUniqueApp(componentsList) ? true : false);
+      }
+    }
+
+    class Dialogs{
+
+      static Header = class extends thorium.Components.Nav{
+        constructor(){
+          super({
+            prop : {
+              name : "Header",
+            },
+            childrens : [
+              new thorium.Components.Button({
+                prop : {class :"close"},
+                proto : {
+                  onMouseDown(){
+                    this.parent.parent.Close();
+                  }
+                }
+              }),
+            ]
+          })
+        }
+      }
+
+      static Content = class extends thorium.Components.Section{
+        constructor(childrens){
+          super({
+            prop : {
+              name : "Content",
+              class : "content"
+            },
+            childrens : childrens,
+            proto : {
+
+            }
+          })
+        }
+      }
+
+      static NewProject = class extends thorium.Components.Dialog{
+        constructor(){
+          super({
+            prop : {
+              class : "dialog newProject"
+            },
+            childrens : [
+              new Dialogs.Header(),
+              new Dialogs.Content([
+                new thorium.Components.Input({
+                  prop : {
+                    name : "Input_PrjName",
+                    placeholder : "porject name"
+                  }
+                }),
+                new thorium.Components.Input({
+                  prop : {
+                    name : "Input_PrjPath",
+                    placeholder : "emplacement"
+                  }
+                }),
+                new thorium.Components.Button({
+                  prop : {
+                    class : "cancel",
+                    text : "cancel"
+                  },
+                  proto : {
+                    onMouseDown(){
+                      this.parent.parent.Close();
+                    }
+                  }
+                }),
+                new thorium.Components.Button({
+                  prop : {
+                    class : "next",
+                    text : "next"
+                  },
+                  proto : {
+                    onMouseDown(){
+                      this.parent.parent.CreateNewProject();
+                    }
+                  }
+                })
+              ]),
+            ],
+            proto : {
+              get_projectName(){return this.children.Content.children.Input_PrjName.element.value},
+              get_projectPath(){return this.children.Content.children.Input_PrjPath.element.value},
+              Close(){this.element.remove();},
+              CreateNewProject(){
+                const _this = this;
+                const projectName = this.get_projectName();
+                const projectPath = this.get_projectPath();
+                if(!projectName)alert("Veuillez encoder un nom de projet");
+                else this.ValidateNewProject(projectName , projectPath)
+                .then(function(result){
+                  thorium.app.th.OpenProject({});
+                  _this.Close();
+                })
+                .catch(function(error){
+                  alert(error.message);
+                })
+              },
+              ValidateNewProject(projectName,projectPath){
+                return new Promise(function(next,reject){
+                  const result = ipcRenderer.sendSync('CreateNewProject',{projectName : projectName , projectPath : projectPath});
+                  if(result.result)next(result);
+                  else reject(result);
+                })
+              }
+            }
+          })
+        }
+      }
+
+    }
+
+    class Content{
+
+    }
+
+    class Project{
+
+      project = {
+        name : null,
+        path : null,
+        data : {
+          /** contient l'architecture de l'app */
+          app : {
+
+          },
+          /** contient les fichiers css */
+          css : {
+
+          },
+          /** contient les librairies javascripts */
+          lib : {
+
+          },
+          /** contient le projet DrawFlow */
+          drawFlow : {
+
+          },
+          /** contient les components généraux custom */
+          components : {
+
+          },
+          /** contient les sub components de chaque planche */
+          subComponents : {
+
+          },
+          workBench : {
+            app : {
+
+            }
+          }
+        }
+      };
+
+      set data(project){this.project = project}
+
+      GetBenchByName(name){
+        return (name ? this.project.data.workBench[name] : console.error("bench name not correct"))
+      }
+
+    }
+
+    class App extends thorium.Components.App {
+
+      static CodeDialog = class extends thorium.Components.Div{
+
+        static Menu = class extends thorium.Components.Div{
+
+          static Buttons = class {
+
+            static Resize = class extends thorium.Components.Button{
+              constructor(){
+                super({
+                  prop : {
+                    name : "resize"
+                  }
+                });
+              }
+            }
+
+            static Validate = class extends thorium.Components.Button{
+              constructor(){
+                super({
+                  prop : {
+                    name : "validate"
+                  }
+                });
+              }
+            }
+
+            static Close = class extends thorium.Components.Button{
+              constructor(src){
+                super({
+                  prop : {
+                    name : "close"
+                  },
+                  proto : {
+                    src : src,
+                    onMouseDown : function(){
+                      src.value = this.parent.parent.parent.children.editor.editor.getValue();
+                      src.element.value = src.value;
+                      src.onChange();
+                      this.parent.parent.parent.element.remove();
+                    }
+                  }
+                });
+              }
+            }
+
+            static Container = class extends thorium.Components.Container{
+              constructor(src){
+                super({
+                  prop : {
+                    name : "ButtonContainer",
+                    class : "ButtonContainer"
+                  },
+                  childrens : [
+                    new App.CodeDialog.Menu.Buttons.Resize(),
+                    new App.CodeDialog.Menu.Buttons.Validate(),
+                    new App.CodeDialog.Menu.Buttons.Close(src)
+                  ]
+                });
+              }
+            }
+
+          }
+
+          static Title = class extends thorium.Components.Text{
+            constructor(title){
+              super({
+                text : title,
+                class : 'title'
+              })
+            }
+          }
+
+          constructor(src,title){
+            super({
+              prop : {
+                name : "codeMenu",
+                class : "codeMenu"
+              },
+              childrens : [
+                new App.CodeDialog.Menu.Title(title),
+                new App.CodeDialog.Menu.Buttons.Container(src)
+              ]
+            });
+          }
+        }
+
+        static Editor = class extends thorium.Components.Textarea{
+          constructor(src){
+            super({
+              prop : {
+                name : "editor"
+              },
+              proto : {
+                src : src,
+                editor : null,
+                onInitialise : function(){
+                  this.editor = this.editor = CodeMirror.fromTextArea(this.element, {
+                    lineNumbers: true,
+                    mode: "javascript"
+                  });
+
+                  if(src.value)this.editor.setValue(src.value);
+                }
+              }
+            });
+          }
+        }
+
+        constructor(src,title){
+          super({
+            prop : {
+              name : "codeDialog",
+              class : "codeDialog"
+            },
+            childrens : [
+              new App.CodeDialog.Menu(src,title),
+              new App.CodeDialog.Editor(src)
+            ],
+          });
+        }
+      }
+
+      static Menu = class extends thorium.Components.Nav{
+
+        static ButtonExpand = class extends thorium.Components.Button{
+          constructor(){
+            super({
+              prop : {
+                text : "&#8592;"
+              },
+              proto : {
+                onMouseDown : function(){
+                  if(this.parent.isActive)this.parent.turnActive();
+                }
+              }
+            })
+          }
+        }
+
+        static Section = class extends thorium.Components.Section{
+
+          static Title = class extends thorium.Components.Button{
+            constructor(text){
+              super({
+                prop : {name : "title" , title : text , id : text},
+                proto : {
+                  onMouseDown : function(){
+                    if(!this.parent.parent.isActive)this.parent.parent.turnActive();
+                    this.parent.turnActive();
+                  }
+                }
+              });
+            }
+          }
+
+          static Container = class extends thorium.Components.Container{
+            constructor(elements){
+              super({
+                prop : {
+                  name : "container"
+                },
+                childrens : elements
+              });
+            }
+          }
+
+          constructor(title,elements){
+            super({
+              prop : {
+                name : title,
+              },
+              childrens : [
+                new App.Menu.Section.Title(title),
+                new App.Menu.Section.Container(elements)
+              ]
+            });
+          }
+        }
+
+        static Nodes = class extends this.Section{
+
+          static Node = class extends thorium.Components.Div{
+
+            static DynamicPropsFields = class extends thorium.Components.Container{
+              constructor(propName = null,propValue = null){
+                super({
+                  prop : {
+                    name : "container",
+                    class : "fields"
+                  },
+                  childrens : [
+                    new thorium.Components.Input({
+                      prop : {placeholder : "propName" , name : "propName" , ...(propName ? {value : propName} : {} )},
+                      proto : {
+                        onChange : function(){
+                          this.parent.RemoveEmptyFields();
+                        }
+                      }
+                    }),
+                    new thorium.Components.Input({
+                      prop : {placeholder : "propValue" , name : "propValue" , ...(propValue ? {value : propValue} : {} )},
+                      proto : {
+                        onChange : function(){
+                          const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                          if(!this.parent.IsCompleteEmpty())view.onNodeChange(this.parent.GetValues())
+                          if(!this.parent.parent.getLastField().IsEmpty())this.parent.parent.addField();
+                          this.parent.RemoveEmptyFields();
+                        }
+                      }
+                    }),
+                  ],
+                  proto : {
+                    GetValues : function(){
+                      if(!this.IsCompleteEmpty())return [this.element.children[0].value,this.element.children[1].value]
+                      else return null;
+                    },
+                    IsCompleteEmpty : function(){
+                      return !Array.from(this.element.querySelectorAll('input'),function(x,i){
+                        if(x.value != "")return false;
+                        else return true;
+                      }).includes(false);
+                    },
+                    IsEmpty : function(){
+                      return Array.from(this.element.querySelectorAll('input'),function(x,i){
+                        if(x.value != "")return false;
+                        else return true;
+                      }).includes(true);
+                    },
+                    RemoveEmptyFields : function(){
+                      if(this.IsCompleteEmpty()  && this.parent.element.children.length > 1)this.element.remove();
+                    }
+                  }
+                });
+              }
+            }
+
+            static DynamicProtosFields = class extends thorium.Components.Container{
+              constructor(protoName = null,protoValue = null){
+                super({
+                  prop : {
+                    name : "container",
+                    class : "fields"
+                  },
+                  childrens : [
+                    new thorium.Components.Input({
+                      prop : {placeholder : "protoName" , name : "protoName" , ...(protoName ? {value : protoName} : {} )},
+                      proto : {
+                        onChange : function(){
+                          this.parent.RemoveEmptyFields();
+                        }
+                      }
+                    }),
+                    new thorium.Components.Input({
+                      prop : {class : 'variable' , placeholder : "protoValue" , name : "protoValue" , ...(protoValue ? {value : protoValue} : {} )},
+                      proto : {
+                        value : null,
+                        changeType : function(){
+                          const value = this.element.value;
+                          this.element.class = "variable";
+                          if(!isNaN(Number(value)))this.element.classList.add("number");
+                          else this.element.classList.add("string");
+                          this.value = this.element.value;
+                        },
+                        onChange : function(){
+                          const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                          this.changeType();
+                          if(!this.parent.parent.getLastField().IsEmpty())this.parent.parent.addField();
+                          if(!this.parent.IsCompleteEmpty())view.onNodeChange(this.parent.GetValues());
+                          this.parent.RemoveEmptyFields();
+                        },
+                        onMouseDown : function(){
+                          const protoName = this.parent.children.protoName.element.value;
+                          if(this.element.classList.contains('function') && protoName){
+                            new thorium.UI.NodeUI([new App.CodeDialog(this,protoName)])
+                            .BuildIn(document.body)
+                            .then(function(dialogBox){
+                              dialogBox.th.Initialise();
+                            })
+                          }
+                        }
+                      }
+                    }),
+                    new thorium.Components.Button({
+                      text : "&#x222b;(x)",
+                      prop : {
+                        class : 'function',
+                      },
+                      proto : {
+                        onMouseDown : function(){
+                          this.turnActive();
+                          this.parent.ChangeType();
+                        },
+                      }
+                    })
+                  ],
+                  proto : {
+                    GetValues : function(){
+                      if(!this.IsCompleteEmpty())return [this.element.children[0].value,this.element.children[1].value]
+                      else return null;
+                    },
+                    IsCompleteEmpty : function(){
+                      return !Array.from(this.element.querySelectorAll('input'),function(x,i){
+                        if(x.value != "")return false;
+                        else return true;
+                      }).includes(false);
+                    },
+                    IsEmpty : function(){
+                      return Array.from(this.element.querySelectorAll('input'),function(x,i){
+                        if(x.value != "")return false;
+                        else return true;
+                      }).includes(true);
+                    },
+                    RemoveEmptyFields : function(){
+                      if(this.IsCompleteEmpty() && this.parent.element.children.length > 1)this.element.remove();
+                    },
+                    ChangeType : function(){
+                      this.element.children[1].value = "";
+                      this.element.children[1].th.value = "";
+                      if(this.element.children[1].classList.contains('variable')){
+                        this.element.children[1].classList.remove('variable');
+                        this.element.children[1].classList.add('function');
+                      }
+                      else {
+                        this.element.children[1].classList.remove('function');
+                        this.element.children[1].classList.add('variable');
+                      }
+                    }
+                  }
+                });
+              }
+            }
+
+            constructor(data){
+              super({
+                prop : {
+                  name : "node",
+                  class : "node container"
+                },
+                childrens : [
+                  new thorium.Components.H1({prop : {text : data.tag}}),
+                  new thorium.Components.Div({
+                    prop : {name : "prop"},
+                    // childrens : [new App.Menu.Nodes.Node.DynamicPropsFields()],
+                    childrens : [
+                      ...Array.from(("prop" in data ? Object.keys(data.prop) : []),function(key,i){
+                        return new App.Menu.Nodes.Node.DynamicPropsFields(key,data.prop[key])
+                      }),
+                      new App.Menu.Nodes.Node.DynamicPropsFields()
+                    ],
+                    proto : {
+                      addField : function(){
+                        new thorium.UI.NodeUI([new App.Menu.Nodes.Node.DynamicPropsFields()])
+                        .BuildIn(this.element)
+                        .then(function(result){
+                          result.th.Initialise();
+                        })
+                      },
+                      getLastField : function(){
+                        return this.element.children[this.element.children.length - 1].th;
+                      },
+                      getDatas(){
+                        return Array.from(this.element.querySelectorAll('.fields') , function(field,i){
+                          return field.th.GetValues();
+                        })
+                      }
+                    }
+                  }),
+                  new thorium.Components.Div({
+                    prop : {
+                      name : "childrens",
+                      text : "childrens"
+                    },
+                    childrens : [
+                      new thorium.Components.Button({
+                        text : "&#x2b;",
+                        prop : {class:"add"},
+                        proto : {
+                          onMouseDown : function(){
+                            this.parent.parent.addNodeOutput();
+                          }
+                        }
+                      }),
+                      new thorium.Components.Button({
+                        text : "&#x2212;",
+                        prop : {class:"minus"},
+                        proto : {
+                          onMouseDown : function(){
+                            this.parent.parent.removeNodeOutput();
+                          }
+                        }
+                      }),
+                    ]
+                  }),
+                  new thorium.Components.Div({
+                    prop : {name : "proto"},
+                    // childrens : [new App.Menu.Nodes.Node.DynamicProtosFields()],
+                    childrens : [
+                      ...Array.from(("prop" in data ? Object.keys(data.proto) : []),function(key,i){
+                        return new App.Menu.Nodes.Node.DynamicProtosFields(key,data.proto[key])
+                      }),
+                      new App.Menu.Nodes.Node.DynamicProtosFields()
+                    ],
+                    proto : {
+                      addField : function(){
+                        new thorium.UI.NodeUI([new App.Menu.Nodes.Node.DynamicProtosFields()])
+                        .BuildIn(this.element)
+                        .then(function(result){
+                          result.th.Initialise();
+                        })
+                      },
+                      getLastField : function(){
+                        return this.element.children[this.element.children.length - 1].th;
+                      },
+                      getDatas(){
+                        return Array.from(this.element.querySelectorAll('.fields') , function(field,i){
+                          return field.th.GetValues();
+                        })
+                      }
+                    }
+                  })
+                ],
+                proto : {
+                  view : null,
+                  props : function(){return this.children.prop},
+                  protos : function(){return this.children.proto},
+                  onInitialise(){
+                    this.view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                  },
+                  getNodeID : function(){
+                    const x = this.element.parentNode.parentNode.id.split('-').filter((x,i)=>x);
+                    return x[x.length - 1];
+                  },
+                  addNodeOutput : function(){
+                    this.view.addNodeOutput(this.getNodeID());
+                  },
+                  removeNodeOutput : function(){
+                    this.view.removeNodeOutput(this.getNodeID());
+                  },
+                  getAllData(){
+                    return {prop : this.getPropData() , proto : this.getProtoData() };
+                  },
+                  getPropData(){
+                    let toReturn = {};
+                    for(const e of this.element.children.prop.th.getDatas()){
+                      if(e){
+                        const x = {};
+                        x[e[0]] = e[1];
+                        toReturn = { ...toReturn , ...x }
+                      }
+                    }
+                    return toReturn;
+                  },
+                  getProtoData(){
+                    let toReturn = {};
+                    for(const e of this.element.children.proto.th.getDatas()){
+                      if(e){
+                        const x = {};
+                        x[e[0]] = e[1];
+                        toReturn = { ...toReturn , ...x }
+                      }
+                    }
+                    return toReturn;
+                  }
+                }
+              });
+            }
+
+          }
+
+          static Buttons = Array.from(Object.keys(nodeTemplate), function(x,i){
+            return new thorium.Themes.Default.Button.Icon({
+              text : x,
+              background : "blue",
+              color : "white",
+              proto : {
+                tag : x,
+                onMouseDown : function(){
+                  this.app.children.WorkGroupView.children.GroupView.getActiveView().AddNode(this.tag);
+                }
+              }
+            })
+          })
+
+          constructor(title){
+            super("Nodes",App.Menu.Nodes.Buttons)
+          }
+        }
+
+        constructor(){
+          super({
+            prop : {
+              name : "menu"
+            },
+            childrens : [
+              new App.Menu.ButtonExpand(),
+              new App.Menu.Nodes()
+            ],
+            proto : {
+              onActive : function(){
+
+              },
+              onUnActive : function(){
+                this.TurnAllUnActive();
+              },
+              TurnAllUnActive : function(){
+                for(const e of this.element.children){
+                  if(e.th.isActive)e.th.turnActive();
+                }
+              }
+            }
+          });
+        }
+      }
+
+      static WorkGroupView = class extends thorium.Components.Container{
+
+        static GroupView = class extends thorium.Components.Div{
+
+          static GroupMenu = class extends thorium.Components.Nav{
+            constructor(){
+              super({
+                prop : {
+                  class : "GroupMenu",
+                  name : "GroupMenu"
+                },
+                proto : {
+                  Render(project){
+                    this.Clear();
+                    this.RenderBenchTickets((project ? project.data.workBench : null));
+                  },
+                  Clear(){this.element.innerHTML = "";},
+                  RenderBenchTickets(workBench){
+                    new thorium.UI.NodeUI(Array.from(Object.keys((workBench ? workBench : {app : {}})) , function(key,i){
+                      return new thorium.Components.Button({
+                        prop : {
+                          class : "ticket",
+                          text : key
+                        },
+                        proto : {
+                          ticketName : key,
+                          onInitialise(){
+                            console.log('boutton');
+                            if(this.ticketName == 'app' && !this.isActive)this.onMouseDown();
+                          },
+                          onMouseDown(){
+                            console.log("ixci");
+                            this.turnActive();
+                            this.app.children.WorkGroupView.OpenView(this.ticketName);
+                          }
+                        }
+                      })
+                    }))
+                    .BuildIn(this.element)
+                    .then(function(ticket){
+                      ticket.th.Initialise();
+                    })
+
+                  }
+                }
+              });
+            }
+          }
+
+          static View = class extends thorium.Components.Div{
+            constructor(viewName){
+              super({
+                prop : {
+                  class : 'view',
+                  name : viewName
+                },
+                proto : {
+                  editor : null,
+                  get_arch : null,
+                  viewName : viewName,
+                  initialised : false,
+                  isMouseDown : false,
+                  cursorPosition : null,
+                  onInitialise : function(){
+                    if(!this.initialised)this.Init();
+                    this.initialised = true;
+                  },
+                  Init(){
+                    this.editor = new Drawflow(this.element);
+
+                    this.editor.on('nodeCreated', this.nodeCreated );
+                    this.editor.on('nodeRemoved', this.nodeRemoved );
+                    this.editor.on('connectionCreated', this.connectionCreated );
+                    this.editor.on('zoom' , this.onZoom );
+
+                    this.get_arch = ipcRenderer.on('get_arch', this.ExportTemplate);
+
+                    this.editor.reroute = true;
+                    this.editor.start();
+                    try{
+                      console.log(this.app.project.project.Project.data.workBench);
+                      const workBench = this.app.project.project.Project.data.workBench;
+                      console.log(workBench)
+                      if(this.viewName in workBench && 'drawflow' in workBench[this.viewName])this.Import(workBench[this.viewName]);
+                    }
+                    catch(error){
+                      console.log(error)
+                    }
+                    this.parent.activeViewByName(this.viewName);
+                  },
+                  onMouseEnter(){
+                    console.log("onMouseEnter");
+                  },
+                  onMouseLeave(){
+                    console.log("onMouseLeave");
+                  },
+                  onMouseDown(e){
+                    console.log(e);
+                    const mouse = thorium.Engine.Handlers.Mouse;
+                    const drawflow = this.element.children[0];
+                    if(!e.path.includes(drawflow))this.isMouseDown = true;
+                    if(this.isMouseDown && !e.path.includes(drawflow))this.cursorPosition = mouse.position;
+                  },
+                  onMouseUp(){
+                    this.isMouseDown = false;
+                    this.cursorPosition = null;
+                  },
+                  onMouseMove(e){
+                    if(this.isMouseDown && this.cursorPosition){
+                      // translate(-134px, 0px) scale(1)
+                      try{
+                        const mouse = thorium.Engine.Handlers.Mouse;
+                        const x = this.editor.canvas_x;
+                        const y = this.editor.canvas_y;
+                        const newX = x - (this.cursorPosition.x - mouse.position.x);
+                        const newY = y - (this.cursorPosition.y - mouse.position.y);
+                        this.element.children[0].style.transform = `translate(${newX}px, ${newY}px) scale(${this.editor.zoom})`;
+                        this.editor.canvas_x = newX;
+                        this.editor.canvas_y = newY;
+                        this.cursorPosition = mouse.position;
+                      }
+                      catch(error){
+
+                      }
+                    }
+                  },
+                  GetNode : function(id){
+                    return this.element.querySelectorAll(`div#node-${id}`)[0];
+                  },
+                  getNodeData(id){
+                    const node = this.GetNode(id).querySelectorAll(`.node.container`)[0].th;
+                    return node.getAllData();
+                  },
+                  AddNode : function(tag){
+                    const _this = this;
+
+                    var data = { tag:tag , prop : {} , proto : {} };
+                    const nodeId = _this.editor.addNode(tag, nodeTemplate[tag].input , nodeTemplate[tag].output , 150, 300, tag, data , "");
+                    const node = this.GetNode(nodeId);
+                    new thorium.UI.NodeUI([new App.Menu.Nodes.Node({tag : tag})])
+                    .BuildIn(node.querySelectorAll(".drawflow_content_node")[0])
+                    .then(function(result){
+                      result.th.Initialise();
+                    })
+
+                  },
+                  UpdateNodeDataFromId(id){
+                    this.editor.updateNodeDataFromId(id,{...this.editor.getNodeFromId(id).data,...this.getNodeData(id)})
+                  },
+                  UpdateAllNodeConnectionPosition(){
+                    // this.editor.updateConnectionNodes();
+                    const x = this.editor.export();
+                    for(const key of Object.keys(x.drawflow.Home.data)){
+                      this.editor.updateConnectionNodes(`node-${key}`);
+                    }
+                  },
+                  getAllComponents : function(){
+
+                    const parent_node = this.querySelector(".parent-node");
+                    return Array.from(parent_node , function(x,i){
+                      return x.children[0].classList[1];
+                    })
+
+                  },
+                  getAppComponent : function(){
+                    const parent_node = this.querySelector(".parent-node");
+                    return Array.from(parent_node , function(x,i){
+                      if(x.children[0].classList.contains('app'))return x;
+                    }).filter((x,i)=>x)[0];
+                  },
+                  RemoveAllEmptyParentsNode : function(){
+                    const parent_node = this.querySelector(".parent-node");
+                    for(const e of parent_node){if(e.children.length == 0)e.remove()}
+                  },
+                  BuildTemplate : function(){
+                    const _this = this;
+                    const app = this.getAppComponent();
+                    return NodeUI.toObject(this.element,app)
+                    // .then(function(result){
+                    //   console.log(result);
+                    //   ipcRenderer.sendSync('thorium_template', JSON.stringify(result));
+                    // });
+                  },
+                  Export(){
+                    const result = this.editor.export();
+                    return result;
+                  },
+                  Import(workBench){
+                    const _this = this;
+                    function setMissingContent(workBench,self){
+
+                      for(const key of Object.keys(workBench)){
+                        const data = workBench[key].data;
+                        const node = self.GetNode(key);
+                        new thorium.UI.NodeUI([new App.Menu.Nodes.Node(data)])
+                        .BuildIn(node.querySelectorAll(".drawflow_content_node")[0])
+                        .then(function(result){
+                          result.th.Initialise();
+                          _this.UpdateAllNodeConnectionPosition();
+                        });
+
+                      }
+
+                    }
+
+                    this.editor.import(workBench);
+                    setMissingContent(workBench.drawflow.Home.data,this);
+
+                  },
+                  UpdateNodeDatas(){
+                    const result = this.editor.export();
+                    for(const key of Object.keys(result.drawflow.Home.data)){
+                      // const data = result.drawflow.Home.data[key];
+                      // const nodeData = this.getNodeData(key);
+                      this.UpdateNodeDataFromId(key);
+                    }
+                  },
+                  // Event IPC
+                  ExportTemplate : async function(event,filePath){
+                    const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                    const template = await view.BuildTemplate();
+                    ipcRenderer.sendSync('thorium_arch_template_export', JSON.stringify({filePath : filePath ,template : template}));
+                  },
+                  SendTemplate : async function(){
+                    // const template = await this.BuildTemplate()
+                    ipcRenderer.sendSync('update-project-template', {
+                      app : await this.BuildTemplate(),
+                      workBench : {
+                        app : this.Export()
+                      }
+                    });
+                  },
+                  /// EDITOR
+                  addNodeOutput : function(id){
+                    this.editor.addNodeOutput(id);
+                  },
+                  removeNodeOutput : function(id){
+                    const node = this.GetNode(id);
+                    const outputs = node.querySelectorAll('.output');
+                    if(outputs.length > 1){
+                      const lastOutput = outputs[outputs.length - 1].classList[1];
+                      this.editor.removeNodeOutput(id,lastOutput);
+                    }
+                  },
+                  nodeCreated : function(id){
+                    const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                    const components = view.getAllComponents();
+                    if(!NodeValidity.isAppPresentAndUnique(components)){
+                      if(!NodeValidity.isAppPresent(components))alert("⚠ App not present ⚠");
+                      if(!NodeValidity.isUniqueApp(components))alert("⚠ App not unique ⚠");
+                    }
+                    else{
+                      view.SendTemplate();
+                    }
+                  },
+                  nodeRemoved : function(id){
+                    const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                    view.RemoveAllEmptyParentsNode();
+                  },
+                  connectionCreated : function({ output_id, input_id, output_class, input_class }){
+                    const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                    const linksInput = view.element.querySelectorAll(`svg.node_in_node-${input_id}.${input_class}`);
+                    const linksOutput = view.element.querySelectorAll(`svg.node_out_node-${output_id}.${output_class}`);
+
+                    if(linksInput.length > 1 || linksOutput.length > 1){
+                      if(linksInput.length > 1)alert("⚠ This component is already use ⚠");
+                      if(linksOutput.length > 1)alert("⚠ This children's slot is already use ⚠");
+                      view.editor.removeSingleConnection(output_id, input_id, output_class, input_class);
+                    }
+                    else{
+                      view.SendTemplate();
+                    }
+                  },
+                  onZoom : function(zoom_level){
+                    const view = thorium.app.children.WorkGroupView.children.GroupView.th.getActiveView();
+                    view.element.style.backgroundSize = `${zoom_level + 1}rem ${zoom_level + 1}rem`;
+                  },
+                  // Custom Event
+                  onNodeChange : function(){
+                    this.SendTemplate();
+                    this.UpdateNodeDatas();
+                  }
+                }
+              });
+            }
+          }
+
+          static HTMLView = class extends thorium.UI.ElementUI{
+            constructor(){
+              super({
+                type : "iframe",
+                prop : {
+                  id : "HTMLview",
+                  name : "HTMLview",
+                  style : Style.Css({
+                    height: "100%",
+                    width: "100%"
+                  })
+                },
+                proto : {
+                  onInitialise : function(){
+                    this.AddScript("thorium","../lib/thorium.js");
+                  },
+                  AddScript : function(id,url){
+                    const script = this.element.contentDocument.createElement('script');
+                    script.id = id;
+                    script.src = url;
+                    script.type = "text/javascript";
+                    this.element.contentDocument.head.appendChild(script);
+                  },
+                  AddCss : function(){
+
+                  },
+                  Clear : function(){
+                    this.element.contentDocument.body.innerHTML = "";
+                  },
+                  BuildTemplate : function(T){
+                    console.log(T);
+                    this.Clear();
+                    new this.element.contentWindow.thorium.UI.NodeUI([T])
+                    .BuildIn(this.element.contentDocument.body)
+                    .then(function(element){
+                      element.th.Initialise();
+                    })
+                  }
+                }
+              })
+            }
+          }
+
+          constructor(){
+            super({
+              prop : {
+                id : "GroupView",
+                name : "GroupView"
+              },
+              childrens : [
+                new App.WorkGroupView.GroupView.GroupMenu()
+              ],
+              proto : {
+                /** Chargement d'une view de bench */
+                OpenView(viewName){
+                  console.log("OpenView")
+                  const _this = this;
+                  if(!this.getViewByName(viewName)){
+                    return new Promise(function(next){
+                      new thorium.UI.NodeUI([new App.WorkGroupView.GroupView.View(viewName)])
+                      .BuildIn(_this.element)
+                      .then(function(view){
+                        console.log(view)
+                        _this.children[viewName] = view.th;
+                        next(view.th.Initialise());
+                      })
+                    })
+                  }
+                },
+
+                /** fermeture d'une view de bench */
+                CloseView(viewName){
+                  this.getViewByName(viewName).element.remove();
+                  delete this.children[viewName];
+                },
+                /** affichage d'une view */
+                ShowView(viewName){
+                  this.unactiveView();
+                  this.getViewByName(viewName).activeView();
+                },
+                /** retourne une view en fonction de son nom */
+                getViewByName(viewName){
+                  const x = this.element.querySelectorAll(`.view[name=${viewName}]`);
+                  return ( x.length > 0 ? x[0].th : null);
+                },
+                getActiveView(){
+                  const x = this.element.querySelectorAll(`.view.active`);
+                  return ( x.length > 0 ? x[0].th : null);
+                },
+                activeView(){
+                  if(this.getActiveView() && !this.getActiveView().isActive)this.getActiveView().turnActive();
+                },
+                activeViewByName(viewName){
+                  this.unactiveView();
+                  this.getViewByName(viewName).turnActive();
+                },
+                /** tourne le view actif en unactif */
+                unactiveView(){
+                  if(this.getActiveView() && this.getActiveView().isActive)this.getActiveView().turnActive();
+                }
+              }
+            });
+          }
+
+        }
+
+        constructor(){
+          super({
+            prop : {
+              name : "WorkGroupView",
+            },
+            childrens : [
+              // new App.WorkGroupView.GroupMenu(),
+              new App.WorkGroupView.GroupView()
+            ],
+            proto : {
+              onInitialise : function(){
+                this.UpdateMenu();
+              },
+              AddNode : function(tag){
+                this.children.GroupView.children.view.AddNode(tag);
+              },
+              async OpenProject(project = this.parent.project.project.Project){
+                // await this.OpenView();
+                this.ClearViews();
+                this.UpdateMenu(project);
+              },
+              ShowView(){
+
+              },
+              OpenView(benchName = null){
+                console.log("lol");
+                this.children.GroupView.OpenView(benchName);
+              },
+              CloseView(){if("GroupView" in this.children)this.children.GroupView.element.remove();},
+              ClearViews(){
+                for(const e of this.element.querySelectorAll('.view')){
+                  e.remove();
+                }
+              },
+              UpdateMenu(project){
+                this.element.children.GroupView.children.GroupMenu.th.Render(project);
+              },
+              ClearMenu(){this.children.GroupMenu.Clear();},
+              OpenBench(){
+
+              },
+              CloseBench(){
+
+              }
+            }
+          });
+        }
+
+      }
+
+      static Footer = class extends thorium.Components.Container{
+        constructor(){
+          super({
+            prop : {
+              name : "footer"
+            }
+          });
+        }
+      }
+
+      constructor(){
+        super({
+          childrens : [
+            new App.Menu(),
+            new App.WorkGroupView(),
+            new App.Footer()
+          ],
+          proto : {
+            project : new Project,
+            onInitialise(){
+
+              ipcRenderer.on('manager-open-project',this.ManagerOpenProject);
+
+            },
+            ManagerOpenProject(event,message){
+              console.warn("manager-open-project");
+              const _this = thorium.app.th;
+              _this.project.data = message;
+              _this.children.WorkGroupView.OpenProject();
+            },
+            ShowProject(){
+
+            }
+          }
+        })
+      }
+    }
+
+    class view extends View{
+
+      constructor(){
+        super(new App());
+      }
+
+    }
+
+    thorium.Vue(view).Show();
+  </script>
+</html>

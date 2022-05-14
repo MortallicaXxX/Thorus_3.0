@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module":"AMD",
+    "target": "ES2016",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "preserveConstEnums" : true,
+    "moduleResolution" : "node"
+  },
+  "include": ["**/*"]
+}

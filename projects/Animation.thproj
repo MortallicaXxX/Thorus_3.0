@@ -1,0 +1,231 @@
+{
+	"name": "Animation",
+	"path": "C:\\Users\\Morta\\OneDrive\\Documents\\git\\Thorus_1.0\\projects",
+	"data": {
+		"app": {
+			"childrens": [
+				{
+					"childrens": [
+						{
+							"childrens": [],
+							"type": "div",
+							"prop": {
+								"class": "background",
+								"name": "back"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [],
+							"type": "h1",
+							"prop": {
+								"text": "Loading",
+								"class": "loading"
+							},
+							"proto": {}
+						},
+						{
+							"childrens": [],
+							"type": "div",
+							"prop": {
+								"class": "background",
+								"name": "front"
+							},
+							"proto": {}
+						}
+					],
+					"type": "section",
+					"prop": {},
+					"proto": {}
+				}
+			],
+			"type": "app",
+			"prop": {},
+			"proto": {}
+		},
+		"css": {
+			"style": ":root{\n  --font:Menlo, Consolas, 'DejaVu Sans Mono', monospace;\n  --color-purple:rgba(233,3,155,1);\n  --color-lightblue:rgba(62,147,214,1);\n  --font-color:white;\n}\n\napp{\n  background : whitesmoke;\n  position : absolute;\n  top:0;\n  left:0;\n  height:100%;\n  width:100%;\n  display:grid;\n  font-family: var(--font);\n}\n\napp > section{\n  margin:auto;\n  display:grid;\n  height:80%;\n  width:80%;\n  color:var(--font-color);\n}\n\napp > section > *{\n  margin:auto;\n  grid-row:1;\n  grid-column:1;\n}\n\napp > section > .background{\n  height : 200px;\n  width :200px;\n  border-radius:100%;\n  animation: bubble infinite 1.5s ease-in-out;\n  opacity:0.5;\n  background: var(--color-purple);\n  background: linear-gradient(90deg, var(--color-purple) 0%, var(--color-lightblue) 100%);\n}\n\napp > section > .background[name=back]{\n  filter: drop-shadow(1px 1px 20px rgba(233,3,155,0.5));\n  opacity:0.6;\n}\n\napp > section > .background[name=front]{\n  transform:rotate(90deg);\n  filter: drop-shadow(1px 1px 20px rgba(62,147,214,0.2));\n}\n\napp > section > h1.loading{\n  z-index:2;\n  display:inline-flex;\n  column-gap:5px;\n}\n\napp > section > h1.loading::before , app > section > h1.loading::after{\n  content:\".\";\n  animation: loading infinite 2s linear;\n}\n\n@keyframes bubble {\n  0% { \n  \tborder-radius : 50% 50% 50% 50% / 45% 55% 45% 55%;\n  }\n  33%{\n  \tborder-radius : 50% 50% 50% 50% / 30% 70% 30% 70%;\n  }\n  66%{\n  \tborder-radius : 70% 30% 70% 30% / 50% 50% 50% 50%;\n  }\n  100% { \n  \tborder-radius : 55% 45% 55% 45% / 50% 50% 50% 50%;\n  }\n}\n\n@keyframes loading {\n  0% { \n  \tcontent:\".\";\n  }\n  33%{\n  \tcontent:\"..\";\n  }\n  66%{\n  \tcontent:\"...\";\n  }\n}"
+		},
+		"lib": {},
+		"drawFlow": {},
+		"components": {},
+		"subComponents": {},
+		"workBench": {
+			"app": {
+				"drawflow": {
+					"Home": {
+						"data": {
+							"1": {
+								"id": 1,
+								"name": "app",
+								"data": {
+									"tag": "app",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "app",
+								"html": "",
+								"typenode": false,
+								"inputs": {},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "2",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": -257,
+								"pos_y": 193.5
+							},
+							"2": {
+								"id": 2,
+								"name": "section",
+								"data": {
+									"tag": "section",
+									"prop": {},
+									"proto": {}
+								},
+								"class": "section",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "1",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": [
+											{
+												"node": "3",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_2": {
+										"connections": [
+											{
+												"node": "5",
+												"output": "input_1"
+											}
+										]
+									},
+									"output_3": {
+										"connections": [
+											{
+												"node": "4",
+												"output": "input_1"
+											}
+										]
+									}
+								},
+								"pos_x": 310.5,
+								"pos_y": 225
+							},
+							"3": {
+								"id": 3,
+								"name": "div",
+								"data": {
+									"tag": "div",
+									"prop": {
+										"class": "background",
+										"name": "back"
+									},
+									"proto": {}
+								},
+								"class": "div",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_1"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 861,
+								"pos_y": -89.5
+							},
+							"4": {
+								"id": 4,
+								"name": "div",
+								"data": {
+									"tag": "div",
+									"prop": {
+										"class": "background",
+										"name": "front"
+									},
+									"proto": {}
+								},
+								"class": "div",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_3"
+											}
+										]
+									}
+								},
+								"outputs": {
+									"output_1": {
+										"connections": []
+									}
+								},
+								"pos_x": 1039.5,
+								"pos_y": 524.5
+							},
+							"5": {
+								"id": 5,
+								"name": "h1",
+								"data": {
+									"tag": "h1",
+									"prop": {
+										"text": "Loading",
+										"class": "loading"
+									},
+									"proto": {}
+								},
+								"class": "h1",
+								"html": "",
+								"typenode": false,
+								"inputs": {
+									"input_1": {
+										"connections": [
+											{
+												"node": "2",
+												"input": "output_2"
+											}
+										]
+									}
+								},
+								"outputs": {},
+								"pos_x": 955,
+								"pos_y": 199.5
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

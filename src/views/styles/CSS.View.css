@@ -1,0 +1,47 @@
+app{
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: max-content minmax(0,1fr);
+}
+
+app > nav{
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  min-width: 100px;
+  display: grid;
+  grid-auto-rows: min-content;
+}
+
+app > nav > div[name=Content]{
+  display: grid;
+  grid-auto-rows: min-content;
+}
+
+app > nav > div[name=Content] > .sheet-ticket{
+
+}
+
+app > nav > div[name=Content] > .sheet-ticket > .sheet-ticket-name{
+  pointer-events: none;
+}
+
+app > nav > div[name=Content] > .sheet-ticket > button{
+
+}
+
+
+app > div[name=Content]{
+  display: grid;
+}
+
+app > div[name=Content] > .CodeMirror {
+  grid-column: 1;
+  grid-row: 1;
+  height: 100%;
+  width: 100%;
+}

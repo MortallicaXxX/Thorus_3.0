@@ -1,0 +1,35 @@
+{
+  "name": "thorusclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "watch": {
+    "build-WebPack": {
+      "patterns": [
+        "src",
+        "test"
+      ],
+      "extensions": "ts",
+      "quiet": true,
+      "legacyWatch": true,
+      "runOnChangeOnly": false
+    }
+  },
+  "scripts": {
+    "build-WebPack": "webpack",
+    "watch": "npm-watch",
+    "doc": "npx typedoc src/*.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "npm-watch": "^0.11.0",
+    "ts-loader": "^9.2.8",
+    "typedoc": "^0.22.13",
+    "webpack": "^5.70.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.2"
+  }
+}
